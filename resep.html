@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resep Tinggi Protein - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .kartu { background: #171717; border: 1px solid #333; border-radius: 12px; }
+        .tombol-merah { background: #dc2626; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; }
+        .tombol-merah:hover { background: #991b1b; }
+        .filter-chip { display: inline-flex; align-items: center; padding: 6px 12px; background: #262626; border: 1px solid #404040; border-radius: 20px; margin: 4px; cursor: pointer; }
+        .filter-chip.active { background: #dc2626; border-color: #dc2626; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-easy { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .badge-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .badge-hard { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Menu -->
+                <div class="flex items-center space-x-6">
+                      <a href="index.html" class="text-gray-300 hover:text-white">
+                        <i class=""></i> Beranda
+                    </a>
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-chart-line mr-2"></i> Dashboard
+                    </a>
+                    <a href="kalkulator.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-calculator mr-2"></i> Kalkulator
+                    </a>
+                    <a href="resep.html" class="text-merah font-semibold">
+                        <i class="fas fa-utensils mr-2"></i> Resep
+                    </a>
+                    <a href="artikel.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-book-open mr-2"></i> Artikel
+                    </a>
+                    <a href="latihan.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-dumbbell mr-2"></i> Latihan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto max-w-7xl">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold mb-4">
+                    <i class="fas fa-utensils text-merah mr-3"></i>
+                    Database Resep Tinggi Protein
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    100+ resep sehat untuk mendukung program bulking dan fitness Anda
+                </p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="kartu p-6 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <!-- Search -->
+                    <div class="relative flex-grow">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchInput" placeholder="Cari resep (contoh: ayam, telur, smoothie...)" 
+                               class="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-merah">
+                    </div>
+                    
+                    <!-- Filter Button -->
+                    <button onclick="toggleFilters()" class="tombol-merah px-6 py-3">
+                        <i class="fas fa-filter mr-2"></i> Filter
+                    </button>
+                </div>
+
+                <!-- Filter Section -->
+                <div id="filterSection" class="hidden">
+                    <div class="border-t border-gray-700 pt-6">
+                        <!-- Meal Type -->
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-3 text-gray-300">Waktu Makan</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="filter-chip" onclick="toggleFilter('sarapan')">Sarapan</span>
+                                <span class="filter-chip" onclick="toggleFilter('makan_siang')">Makan Siang</span>
+                                <span class="filter-chip" onclick="toggleFilter('makan_malam')">Makan Malam</span>
+                                <span class="filter-chip" onclick="toggleFilter('camilan')">Camilan</span>
+                                <span class="filter-chip" onclick="toggleFilter('sebelum_latihan')">Sebelum Latihan</span>
+                                <span class="filter-chip" onclick="toggleFilter('setelah_latihan')">Setelah Latihan</span>
+                            </div>
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-3 text-gray-300">Tingkat Kesulitan</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="filter-chip" onclick="toggleFilter('mudah')">
+                                    <i class="fas fa-star text-green-400 mr-1"></i> Mudah
+                                </span>
+                                <span class="filter-chip" onclick="toggleFilter('sedang')">
+                                    <i class="fas fa-star text-yellow-400 mr-1"></i> Sedang
+                                </span>
+                                <span class="filter-chip" onclick="toggleFilter('sulit')">
+                                    <i class="fas fa-star text-red-400 mr-1"></i> Sulit
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Cooking Time -->
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-3 text-gray-300">Waktu Memasak</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="filter-chip" onclick="toggleFilter('cepat')">
+                                    <i class="fas fa-bolt text-merah mr-1"></i> Cepat (<15 menit)
+                                </span>
+                                <span class="filter-chip" onclick="toggleFilter('medium')">
+                                    <i class="fas fa-clock text-yellow-400 mr-1"></i> Medium (15-30 menit)
+                                </span>
+                                <span class="filter-chip" onclick="toggleFilter('lama')">
+                                    <i class="fas fa-hourglass text-blue-400 mr-1"></i> Lama (>30 menit)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Protein Source -->
+                        <div class="mb-6">
+                            <h3 class="font-bold mb-3 text-gray-300">Sumber Protein</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                <span class="filter-chip" onclick="toggleFilter('ayam')">Ayam</span>
+                                <span class="filter-chip" onclick="toggleFilter('daging_sapi')">Daging Sapi</span>
+                                <span class="filter-chip" onclick="toggleFilter('ikan')">Ikan</span>
+                                <span class="filter-chip" onclick="toggleFilter('telur')">Telur</span>
+                                <span class="filter-chip" onclick="toggleFilter('tahu')">Tahu</span>
+                                <span class="filter-chip" onclick="toggleFilter('tempe')">Tempe</span>
+                                <span class="filter-chip" onclick="toggleFilter('udang')">Udang</span>
+                                <span class="filter-chip" onclick="toggleFilter('protein_bubuk')">Protein Bubuk</span>
+                            </div>
+                        </div>
+
+                        <!-- Clear Filters -->
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-sm text-gray-400">
+                                    Filter aktif: <span id="activeFilterCount">0</span>
+                                </span>
+                            </div>
+                            <div>
+                                <button onclick="clearFilters()" class="px-4 py-2 text-gray-300 hover:text-white mr-3">
+                                    <i class="fas fa-times mr-1"></i> Hapus Semua
+                                </button>
+                                <button onclick="applyFilters()" class="tombol-merah px-6 py-2">
+                                    <i class="fas fa-check mr-1"></i> Terapkan Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="kartu p-6 text-center">
+                    <div class="text-3xl font-bold text-merah mb-2" id="totalRecipes">120</div>
+                    <div class="text-gray-400">Total Resep</div>
+                </div>
+                <div class="kartu p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-400 mb-2">40+</div>
+                    <div class="text-gray-400">Resep Ayam</div>
+                </div>
+                <div class="kartu p-6 text-center">
+                    <div class="text-3xl font-bold text-green-400 mb-2">25+</div>
+                    <div class="text-gray-400">Vegetarian</div>
+                </div>
+                <div class="kartu p-6 text-center">
+                    <div class="text-3xl font-bold text-yellow-400 mb-2">35+</div>
+                    <div class="text-gray-400">Resep Cepat</div>
+                </div>
+            </div>
+
+            <!-- Featured Recipes -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Resep Pilihan</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="sortRecipes('protein')" class="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-dumbbell mr-2"></i> Protein Tertinggi
+                        </button>
+                        <button onclick="sortRecipes('time')" class="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-clock mr-2"></i> Tercepat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6" id="featuredRecipes">
+                    <!-- Featured recipes will be loaded here -->
+                </div>
+            </div>
+
+            <!-- All Recipes -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6">Semua Resep</h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="allRecipes">
+                    <!-- All recipes will be loaded here -->
+                </div>
+                
+                <!-- Load More -->
+                <div class="text-center mt-10">
+                    <button onclick="loadMoreRecipes()" class="tombol-merah px-8 py-3">
+                        <i class="fas fa-plus mr-2"></i> Muat Lebih Banyak
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 overflow-y-auto">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+            <div class="kartu">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Detail Resep</h2>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Modal Content -->
+                <div class="p-6" id="modalContent">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let activeFilters = new Set();
+        let allRecipes = [];
+        let displayedRecipes = 9;
+        
+        // Sample recipe data
+        const recipes = [
+            {
+                id: 1,
+                title: "Ayam Panggang Madu Bawang Putih",
+                description: "Ayam panggang dengan saus madu dan bawang putih, tinggi protein dan rendah lemak.",
+                protein: 45,
+                calories: 320,
+                time: 25,
+                difficulty: "mudah",
+                category: ["makan_malam", "ayam"],
+                image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "500g dada ayam fillet",
+                    "3 siung bawang putih, cincang",
+                    "2 sdm madu",
+                    "2 sdm kecap asin",
+                    "1 sdm minyak zaitun",
+                    "1/2 sdt lada hitam",
+                    "1/2 sdt garam"
+                ],
+                instructions: [
+                    "Campur semua bahan marinasi dalam mangkuk",
+                    "Masukkan ayam dan diamkan minimal 30 menit",
+                    "Panggang di oven 200°C selama 20-25 menit",
+                    "Balik sekali di tengah proses pemanggangan",
+                    "Sajikan dengan sayuran kukus"
+                ]
+            },
+            {
+                id: 2,
+                title: "Omelet Telur Putih Sayuran",
+                description: "Omelet sehat dari putih telur dengan campuran sayuran segar.",
+                protein: 35,
+                calories: 180,
+                time: 10,
+                difficulty: "mudah",
+                category: ["sarapan", "telur", "cepat"],
+                image: "https://images.unsplash.com/photo-1551782450-17144efb9c50?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "6 putih telur",
+                    "1/2 paprika merah, potong dadu",
+                    "1/2 bawang bombay, iris tipis",
+                    "Segenggam bayam",
+                    "1 sdt minyak zaitun",
+                    "Garam dan lada secukupnya"
+                ],
+                instructions: [
+                    "Kocok putih telur dengan garam dan lada",
+                    "Tumis sayuran dengan minyak zaitun",
+                    "Tuang putih telur ke wajan",
+                    "Masak dengan api kecil hingga matang",
+                    "Lipat omelet dan sajikan"
+                ]
+            },
+            {
+                id: 3,
+                title: "Protein Shake Berries",
+                description: "Smoothie protein dengan campuran berries dan pisang.",
+                protein: 40,
+                calories: 280,
+                time: 5,
+                difficulty: "mudah",
+                category: ["setelah_latihan", "protein_bubuk", "cepat"],
+                image: "https://images.unsplash.com/photo-1573225342396-7f0ea6d87c3c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "1 scoop protein whey vanilla",
+                    "1 cangkir susu almond",
+                    "1/2 cangkir berries campur",
+                    "1/2 pisang",
+                    "Es batu secukupnya",
+                    "1 sdt madu (opsional)"
+                ],
+                instructions: [
+                    "Masukkan semua bahan ke blender",
+                    "Blender hingga halus",
+                    "Tuang ke gelas dan segera nikmati",
+                    "Tambahkan topping chia seed jika suka"
+                ]
+            },
+            {
+                id: 4,
+                title: "Salmon Panggang Lemon",
+                description: "Salmon segar dengan perasan lemon dan rempah-rempah.",
+                protein: 50,
+                calories: 350,
+                time: 20,
+                difficulty: "sedang",
+                category: ["makan_malam", "ikan"],
+                image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "2 potong fillet salmon",
+                    "1 lemon, iris tipis",
+                    "2 sdm minyak zaitun",
+                    "2 siung bawang putih, cincang",
+                    "1 sdt dill kering",
+                    "Garam dan lada secukupnya"
+                ],
+                instructions: [
+                    "Panaskan oven 200°C",
+                    "Bumbui salmon dengan garam, lada, dan dill",
+                    "Letakkan lemon iris di atas salmon",
+                    "Panggang selama 15-18 menit",
+                    "Sajikan dengan asparagus panggang"
+                ]
+            },
+            {
+                id: 5,
+                title: "Greek Yogurt Bowl",
+                description: "Yogurt Yunani dengan topping buah dan kacang.",
+                protein: 30,
+                calories: 250,
+                time: 5,
+                difficulty: "mudah",
+                category: ["sarapan", "camilan", "cepat"],
+                image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "1 cangkir Greek yogurt plain",
+                    "1/2 cangkir berries campur",
+                    "1 sdm almond slice",
+                    "1 sdt madu",
+                    "1 sdt chia seed",
+                    "1/4 cangkir granola rendah gula"
+                ],
+                instructions: [
+                    "Tuang Greek yogurt ke mangkuk",
+                    "Tambahkan berries segar",
+                    "Taburi dengan almond dan chia seed",
+                    "Siram dengan madu",
+                    "Tambahkan granola di atasnya"
+                ]
+            },
+            {
+                id: 6,
+                title: "Daging Sapi Stir-fry",
+                description: "Tumis daging sapi dengan brokoli dan saus khusus.",
+                protein: 55,
+                calories: 380,
+                time: 30,
+                difficulty: "sedang",
+                category: ["makan_siang", "daging_sapi"],
+                image: "https://images.unsplash.com/photo-1603133872646-f5c58b2c9a02?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "400g daging sapi slice",
+                    "2 cangkir brokoli",
+                    "1 paprika merah, potong",
+                    "3 siung bawang putih, cincang",
+                    "2 sdm kecap asin",
+                    "1 sdm minyak wijen",
+                    "1 sdt jahe parut"
+                ],
+                instructions: [
+                    "Tumis bawang putih dan jahe",
+                    "Masukkan daging sapi, masak hingga matang",
+                    "Tambahkan sayuran, tumis hingga layu",
+                    "Tuang kecap asin dan minyak wijen",
+                    "Masak 2 menit tambahan, sajikan"
+                ]
+            },
+            {
+                id: 7,
+                title: "Tahu Kukus Jamur",
+                description: "Tahu kukus dengan topping jamur dan saus tiram.",
+                protein: 25,
+                calories: 200,
+                time: 20,
+                difficulty: "mudah",
+                category: ["vegetarian", "tahu", "makan_malam"],
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "2 potong tahu sutra",
+                    "100g jamur shitake",
+                    "2 sdm saus tiram",
+                    "1 sdt minyak wijen",
+                    "1 batang daun bawang, iris",
+                    "1 sdt kecap asin"
+                ],
+                instructions: [
+                    "Kukus tahu selama 10 menit",
+                    "Tumis jamur dengan sedikit minyak",
+                    "Tambahkan saus tiram dan kecap asin",
+                    "Tuang saus di atas tahu kukus",
+                    "Taburi daun bawang, sajikan"
+                ]
+            },
+            {
+                id: 8,
+                title: "Pre-Workout Oatmeal",
+                description: "Oatmeal dengan pisang dan kayu manis untuk energi sebelum latihan.",
+                protein: 20,
+                calories: 350,
+                time: 10,
+                difficulty: "mudah",
+                category: ["sebelum_latihan", "sarapan", "cepat"],
+                image: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "1/2 cangkir rolled oats",
+                    "1 cangkir air atau susu",
+                    "1 pisang, iris",
+                    "1 sdt kayu manis",
+                    "1 sdm selai kacang",
+                    "1 sdt madu"
+                ],
+                instructions: [
+                    "Masak oats dengan air/menurut petunjuk",
+                    "Aduk hingga creamy",
+                    "Tambahkan pisang dan kayu manis",
+                    "Sajikan dengan selai kacang dan madu",
+                    "Nikmati 1-2 jam sebelum latihan"
+                ]
+            },
+            {
+                id: 9,
+                title: "Udang Saus Bawang Putih",
+                description: "Udang segar dengan saus bawang putih pedas.",
+                protein: 48,
+                calories: 280,
+                time: 15,
+                difficulty: "mudah",
+                category: ["makan_malam", "udang", "cepat"],
+                image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                ingredients: [
+                    "400g udang kupas",
+                    "5 siung bawang putih, cincang",
+                    "1 cabai merah, iris",
+                    "2 sdm saus tiram",
+                    "1 sdm minyak zaitun",
+                    "1 sdt kecap ikan",
+                    "Daun ketumbar untuk hiasan"
+                ],
+                instructions: [
+                    "Tumis bawang putih hingga harum",
+                    "Masukkan udang, masak hingga berubah warna",
+                    "Tambahkan cabai dan saus tiram",
+                    "Masak 2-3 menit hingga matang",
+                    "Hias dengan daun ketumbar, sajikan"
+                ]
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            allRecipes = [...recipes];
+            displayRecipes();
+        });
+
+        // Toggle filter section
+        function toggleFilters() {
+            const section = document.getElementById('filterSection');
+            section.classList.toggle('hidden');
+        }
+
+        // Toggle filter chip
+        function toggleFilter(filter) {
+            const chip = event.target;
+            chip.classList.toggle('active');
+            
+            if (activeFilters.has(filter)) {
+                activeFilters.delete(filter);
+            } else {
+                activeFilters.add(filter);
+            }
+            
+            updateFilterCount();
+        }
+
+        // Update active filter count
+        function updateFilterCount() {
+            document.getElementById('activeFilterCount').textContent = activeFilters.size;
+        }
+
+        // Clear all filters
+        function clearFilters() {
+            activeFilters.clear();
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            updateFilterCount();
+            displayRecipes();
+        }
+
+        // Apply filters
+        function applyFilters() {
+            displayRecipes();
+            document.getElementById('filterSection').classList.add('hidden');
+        }
+
+        // Display recipes
+        function displayRecipes() {
+            let filteredRecipes = [...allRecipes];
+            
+            // Apply filters
+            if (activeFilters.size > 0) {
+                filteredRecipes = filteredRecipes.filter(recipe => {
+                    return recipe.category.some(cat => activeFilters.has(cat));
+                });
+            }
+            
+            // Apply search
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                filteredRecipes = filteredRecipes.filter(recipe => 
+                    recipe.title.toLowerCase().includes(searchTerm) ||
+                    recipe.description.toLowerCase().includes(searchTerm) ||
+                    recipe.ingredients.some(ing => ing.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            // Update total count
+            document.getElementById('totalRecipes').textContent = filteredRecipes.length;
+            
+            // Display featured recipes (first 3)
+            const featuredContainer = document.getElementById('featuredRecipes');
+            featuredContainer.innerHTML = filteredRecipes.slice(0, 3).map(recipe => createRecipeCard(recipe, true)).join('');
+            
+            // Display all recipes
+            const allContainer = document.getElementById('allRecipes');
+            allContainer.innerHTML = filteredRecipes.slice(0, displayedRecipes).map(recipe => createRecipeCard(recipe, false)).join('');
+        }
+
+        // Create recipe card
+        function createRecipeCard(recipe, isFeatured) {
+            const badgeClass = recipe.difficulty === 'mudah' ? 'badge-easy' : 
+                              recipe.difficulty === 'sedang' ? 'badge-medium' : 'badge-hard';
+            const difficultyText = recipe.difficulty === 'mudah' ? 'Mudah' : 
+                                 recipe.difficulty === 'sedang' ? 'Sedang' : 'Sulit';
+            
+            return `
+                <div class="kartu overflow-hidden hover:border-merah transition-all cursor-pointer" onclick="showRecipeDetail(${recipe.id})">
+                    <div class="relative h-48 ${isFeatured ? 'h-56' : 'h-48'} overflow-hidden">
+                        <img src="${recipe.image}" alt="${recipe.title}" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 ${badgeClass} badge">
+                            ${difficultyText}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg mb-2">${recipe.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${recipe.description}</p>
+                        
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                            <div class="text-center">
+                                <div class="font-bold text-merah">${recipe.protein}g</div>
+                                <div class="text-xs text-gray-400">Protein</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="font-bold text-yellow-400">${recipe.calories}</div>
+                                <div class="text-xs text-gray-400">Kalori</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="font-bold text-blue-400">${recipe.time}m</div>
+                                <div class="text-xs text-gray-400">Waktu</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            ${recipe.category.slice(0, 3).map(cat => 
+                                `<span class="px-2 py-1 bg-gray-800 rounded text-xs text-gray-300">${cat.replace('_', ' ')}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Sort recipes
+        function sortRecipes(type) {
+            if (type === 'protein') {
+                allRecipes.sort((a, b) => b.protein - a.protein);
+            } else if (type === 'time') {
+                allRecipes.sort((a, b) => a.time - b.time);
+            }
+            displayRecipes();
+        }
+
+        // Load more recipes
+        function loadMoreRecipes() {
+            displayedRecipes += 6;
+            displayRecipes();
+        }
+
+        // Show recipe detail
+        function showRecipeDetail(recipeId) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (!recipe) return;
+            
+            const badgeClass = recipe.difficulty === 'mudah' ? 'badge-easy' : 
+                              recipe.difficulty === 'sedang' ? 'badge-medium' : 'badge-hard';
+            const difficultyText = recipe.difficulty === 'mudah' ? 'Mudah' : 
+                                 recipe.difficulty === 'sedang' ? 'Sedang' : 'Sulit';
+            
+            document.getElementById('modalTitle').textContent = recipe.title;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div>
+                        <img src="${recipe.image}" alt="${recipe.title}" class="w-full h-64 object-cover rounded-lg mb-6">
+                        
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <div class="text-center p-4 bg-gray-800 rounded-lg">
+                                <div class="text-2xl font-bold text-merah">${recipe.protein}g</div>
+                                <div class="text-sm text-gray-400">Protein</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-800 rounded-lg">
+                                <div class="text-2xl font-bold text-yellow-400">${recipe.calories}</div>
+                                <div class="text-sm text-gray-400">Kalori</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-800 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-400">${recipe.time}m</div>
+                                <div class="text-sm text-gray-400">Waktu</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-800 rounded-lg">
+                                <div class="text-2xl font-bold ${recipe.difficulty === 'mudah' ? 'text-green-400' : recipe.difficulty === 'sedang' ? 'text-yellow-400' : 'text-red-400'}">${difficultyText}</div>
+                                <div class="text-sm text-gray-400">Kesulitan</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="font-bold text-lg mb-3 text-gray-300">Bahan-bahan</h3>
+                            <ul class="space-y-2">
+                                ${recipe.ingredients.map(ing => `<li class="flex items-start">
+                                    <i class="fas fa-check text-merah mr-2 mt-1"></i>
+                                    <span>${ing}</span>
+                                </li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-bold text-lg mb-3 text-gray-300">Cara Membuat</h3>
+                            <ol class="space-y-3">
+                                ${recipe.instructions.map((step, index) => `<li class="flex items-start">
+                                    <span class="w-6 h-6 bg-merah rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0">${index + 1}</span>
+                                    <span>${step}</span>
+                                </li>`).join('')}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-700">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${recipe.category.map(cat => 
+                            `<span class="px-3 py-1 bg-gray-800 rounded-full text-sm text-gray-300">${cat.replace('_', ' ')}</span>`
+                        ).join('')}
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button onclick="saveRecipe(${recipe.id})" class="tombol-merah px-6 py-3">
+                            <i class="fas fa-save mr-2"></i> Simpan ke Favorit
+                        </button>
+                        <button onclick="shareRecipe(${recipe.id})" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800">
+                            <i class="fas fa-share-alt mr-2"></i> Bagikan
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('recipeModal').classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('recipeModal').classList.add('hidden');
+        }
+
+        // Save recipe to favorites
+        function saveRecipe(recipeId) {
+            const user = auth ? auth.getCurrentUser() : null;
+            if (!user) {
+                alert('Silakan login untuk menyimpan resep favorit!');
+                return;
+            }
+            alert('Resep berhasil disimpan ke favorit!');
+        }
+
+        // Share recipe
+        function shareRecipe(recipeId) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (navigator.share) {
+                navigator.share({
+                    title: recipe.title,
+                    text: recipe.description,
+                    url: window.location.href
+                });
+            } else {
+                alert('URL resep telah disalin ke clipboard!');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            displayRecipes();
+        });
+    </script>
+</body>
+</html>

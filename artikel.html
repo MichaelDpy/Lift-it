@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artikel Edukasi - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .kartu { background: #171717; border: 1px solid #333; border-radius: 12px; }
+        .tombol-merah { background: #dc2626; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; }
+        .tombol-merah:hover { background: #991b1b; }
+        .article-category { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .category-nutrisi { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .category-latihan { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .category-suplement { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+        .category-umum { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Menu -->
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white">
+                        <i class=""></i> Beranda
+                    </a>
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-chart-line mr-2"></i> Dashboard
+                    </a>
+                    <a href="kalkulator.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-calculator mr-2"></i> Kalkulator
+                    </a>
+                    <a href="resep.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-utensils mr-2"></i> Resep
+                    </a>
+                    <a href="artikel.html" class="text-merah font-semibold">
+                        <i class="fas fa-book-open mr-2"></i> Artikel
+                    </a>
+                    <a href="latihan.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-dumbbell mr-2"></i> Latihan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold mb-4">
+                    <i class="fas fa-book-open text-merah mr-3"></i>
+                    Artikel & Edukasi Fitness
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    Pelajari ilmu terbaru tentang nutrisi, latihan, dan suplementasi untuk hasil optimal
+                </p>
+            </div>
+
+            <!-- Featured Article -->
+            <div class="kartu p-8 mb-10">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <span class="article-category category-nutrisi">Nutrisi</span>
+                        <h2 class="text-3xl font-bold mt-4 mb-4">Protein Timing: Kapan Waktu Terbaik Konsumsi Protein?</h2>
+                        <p class="text-gray-300 mb-6">
+                            Penelitian terbaru menunjukkan bahwa waktu konsumsi protein memiliki pengaruh signifikan 
+                            terhadap sintesis protein otot. Temukan strategi optimal untuk memaksimalkan hasil latihan Anda.
+                        </p>
+                        <div class="flex items-center text-gray-400 mb-6">
+                            <i class="fas fa-clock mr-2"></i>
+                            <span>Baca 8 min • Dipublikasi 2 hari lalu</span>
+                        </div>
+                        <button onclick="readArticle(1)" class="tombol-merah px-6 py-3">
+                            <i class="fas fa-book-reader mr-2"></i> Baca Artikel Lengkap
+                        </button>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Protein Timing" class="w-full h-64 object-cover rounded-lg">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article Categories -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold mb-6">Kategori Artikel</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="kartu p-6 text-center cursor-pointer hover:border-merah" onclick="filterByCategory('nutrisi')">
+                        <div class="w-16 h-16 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-utensils text-2xl text-green-400"></i>
+                        </div>
+                        <h3 class="font-bold mb-2">Nutrisi</h3>
+                        <p class="text-sm text-gray-400">2 artikel</p>
+                    </div>
+                    <div class="kartu p-6 text-center cursor-pointer hover:border-merah" onclick="filterByCategory('latihan')">
+                        <div class="w-16 h-16 bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-dumbbell text-2xl text-blue-400"></i>
+                        </div>
+                        <h3 class="font-bold mb-2">Latihan</h3>
+                        <p class="text-sm text-gray-400">2 artikel</p>
+                    </div>
+                    <div class="kartu p-6 text-center cursor-pointer hover:border-merah" onclick="filterByCategory('suplement')">
+                        <div class="w-16 h-16 bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-pills text-2xl text-purple-400"></i>
+                        </div>
+                        <h3 class="font-bold mb-2">Suplementasi</h3>
+                        <p class="text-sm text-gray-400">2 artikel</p>
+                    </div>
+                    <div class="kartu p-6 text-center cursor-pointer hover:border-merah" onclick="filterByCategory('umum')">
+                        <div class="w-16 h-16 bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-brain text-2xl text-yellow-400"></i>
+                        </div>
+                        <h3 class="font-bold mb-2">Mindset</h3>
+                        <p class="text-sm text-gray-400">2 artikel</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="kartu p-6 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <!-- Search -->
+                    <div class="relative flex-grow">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="articleSearch" placeholder="Cari artikel..." 
+                               class="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-merah">
+                    </div>
+                    
+                    <!-- Sort -->
+                    <select id="articleSort" class="bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3">
+                        <option value="newest">Terbaru</option>
+                        <option value="popular">Populer</option>
+                        <option value="reading">Durasi Baca</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Articles Grid -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold mb-6" id="articlesTitle">Semua Artikel</h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="articlesGrid">
+                    <!-- Articles will be loaded here -->
+                </div>
+                
+                <!-- Load More -->
+                <div class="text-center mt-10">
+                    <button onclick="loadMoreArticles()" class="tombol-merah px-8 py-3">
+                        <i class="fas fa-plus mr-2"></i> Muat Lebih Banyak
+                    </button>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="kartu p-8">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-question-circle text-merah mr-3"></i>
+                    FAQ - Pertanyaan Umum
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="faq-item border-b border-gray-700 pb-4">
+                        <button onclick="toggleFAQ(1)" class="flex justify-between items-center w-full text-left">
+                            <span class="font-medium">Berapa banyak protein yang diperlukan untuk bulking?</span>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="faq-1" class="hidden mt-3 text-gray-300">
+                            <p>Untuk tujuan bulking, disarankan mengonsumsi 1.6-2.2 gram protein per kilogram berat badan per hari. 
+                            Contoh: Untuk berat 70kg, konsumsi 112-154g protein sehari.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item border-b border-gray-700 pb-4">
+                        <button onclick="toggleFAQ(2)" class="flex justify-between items-center w-full text-left">
+                            <span class="font-medium">Apakah cardio membakar otot?</span>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="faq-2" class="hidden mt-3 text-gray-300">
+                            <p>Cardio dalam intensitas dan volume yang wajar tidak akan membakar otot. Justru, cardio ringan dapat 
+                            meningkatkan recovery dan kesehatan kardiovaskular. Hindari cardio berlebihan saat dalam fase bulking.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item border-b border-gray-700 pb-4">
+                        <button onclick="toggleFAQ(3)" class="flex justify-between items-center w-full text-left">
+                            <span class="font-medium">Suplement apa yang benar-benar bekerja?</span>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="faq-3" class="hidden mt-3 text-gray-300">
+                            <p>Suplement dengan bukti ilmiah kuat: Whey Protein, Creatine, Kafein, Beta-Alanine, dan Citrulline. 
+                            Fokus pada nutrisi makanan utuh sebelum mempertimbangkan suplement.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button onclick="toggleFAQ(4)" class="flex justify-between items-center w-full text-left">
+                            <span class="font-medium">Berapa lama untuk melihat hasil latihan?</span>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="faq-4" class="hidden mt-3 text-gray-300">
+                            <p>Dengan konsistensi yang baik, perubahan kecil dapat terlihat dalam 4-6 minggu. Perubahan signifikan 
+                            biasanya membutuhkan 3-6 bulan. Kunci utamanya adalah konsistensi dan progresivitas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div id="articleModal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 overflow-y-auto">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+            <div class="kartu">
+                <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                    <div>
+                        <span id="modalCategory" class="article-category"></span>
+                        <h2 id="modalTitle" class="text-2xl font-bold mt-2">Judul Artikel</h2>
+                    </div>
+                    <button onclick="closeArticleModal()" class="text-gray-400 hover:text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6" id="articleContent">
+                    <!-- Content will be loaded here -->
+                </div>
+                
+                <div class="p-6 border-t border-gray-700">
+                    <div class="flex justify-between items-center">
+                        <div class="text-gray-400">
+                            <i class="fas fa-clock mr-2"></i>
+                            <span id="readTime"></span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button onclick="shareArticle()" class="text-gray-400 hover:text-white">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button onclick="bookmarkArticle()" class="text-gray-400 hover:text-yellow-400">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentCategory = 'all';
+        let displayedArticles = 6;
+        
+        // Articles data
+        const articles = [
+            {
+                id: 1,
+                title: "Protein Timing: Kapan Waktu Terbaik Konsumsi Protein?",
+                excerpt: "Pelajari strategi optimal untuk memaksimalkan sintesis protein otot berdasarkan waktu konsumsi.",
+                category: "nutrisi",
+                readTime: "8 min",
+                date: "2 hari lalu",
+                content: `
+                    <div class="prose prose-invert max-w-none">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Protein Timing" class="w-full h-64 object-cover rounded-lg mb-6">
+                        
+                        <h3>Pendahuluan</h3>
+                        <p>Protein adalah nutrisi penting untuk pertumbuhan dan perbaikan otot. Namun, waktu konsumsi protein juga memainkan peran krusial dalam memaksimalkan hasil latihan Anda.</p>
+                        
+                        <h3>Protein Window</h3>
+                        <p>Konsep "anabolic window" atau "protein window" mengacu pada periode setelah latihan di mana tubuh paling responsif terhadap asupan protein. Penelitian menunjukkan window ini berlangsung hingga 2 jam pasca-latihan.</p>
+                        
+                        <h3>Rekomendasi Praktis</h3>
+                        <ul>
+                            <li><strong>Sebelum latihan:</strong> Konsumsi 20-30g protein 1-2 jam sebelum latihan</li>
+                            <li><strong>Sesudah latihan:</strong> Konsumsi 20-40g protein dalam 2 jam pasca-latihan</li>
+                            <li><strong>Sebelum tidur:</strong> Casein protein dapat memberikan amino acid release yang lambat selama tidur</li>
+                            <li><strong>Sarapan:</strong> Protein tinggi di pagi hari dapat membantu kontrol nafsu makan sepanjang hari</li>
+                        </ul>
+                        
+                        <h3>Kesimpulan</h3>
+                        <p>Sementara total asupan protein harian tetap faktor terpenting, waktu distribusi protein dapat memberikan manfaat tambahan untuk sintesis protein otot dan recovery.</p>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "Progressive Overload: Kunci Pertumbuhan Otot",
+                excerpt: "Pahami prinsip fundamental dalam latihan beban untuk terus menantang otot Anda berkembang.",
+                category: "latihan",
+                readTime: "6 min",
+                date: "5 hari lalu",
+                content: `
+                    <div class="prose prose-invert max-w-none">
+                        <h3>Apa Itu Progressive Overload?</h3>
+                        <p>Progressive overload adalah prinsip meningkatkan tuntutan pada sistem muskuloskeletal secara bertahap untuk terus-menerus menghasilkan adaptasi.</p>
+                        
+                        <h3>Cara Menerapkan Progressive Overload</h3>
+                        <ol>
+                            <li><strong>Tambah Beban:</strong> Naikkan berat beban secara bertahap</li>
+                            <li><strong>Tambah Repetisi:</strong> Lakukan lebih banyak repetisi dengan beban yang sama</li>
+                            <li><strong>Tambah Set:</strong> Tambahkan jumlah set untuk volume lebih tinggi</li>
+                            <li><strong>Kurangi Rest Time:</strong> Kurangi waktu istirahat antar set</li>
+                            <li><strong>Perbaiki Form:</strong> Lakukan gerakan dengan kontrol yang lebih baik</li>
+                        </ol>
+                        
+                        <h3>Tips Praktis</h3>
+                        <ul>
+                            <li>Catat setiap sesi latihan Anda</li>
+                            <li>Targetkan peningkatan kecil setiap minggu (2.5-5% untuk beban)</li>
+                            <li>Jangan mengorbankan form demi beban berat</li>
+                            <li>Gunakan periodisasi untuk menghindari plateau</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "Creatine: Suplement Terbukti untuk Kekuatan",
+                excerpt: "Gunakan creatine dengan benar untuk meningkatkan performa latihan dan pertumbuhan otot.",
+                category: "suplement",
+                readTime: "7 min",
+                date: "1 minggu lalu",
+                content: "Creatine adalah salah satu suplemen paling terbukti secara ilmiah dalam meningkatkan kekuatan, power, dan performa latihan. Suplemen ini membantu tubuh memproduksi energi cepat melalui peningkatan cadangan phosphocreatine, sehingga kamu bisa melakukan repetisi lebih banyak dan menjaga intensitas latihan tetap tinggi. Selain mendukung performa, creatine juga membantu meningkatkan ukuran otot melalui peningkatan hidrasi sel dan adaptasi latihan yang lebih baik. Keamanannya juga telah didukung banyak penelitian jangka panjang, menjadikannya pilihan aman untuk pemula maupun atlet berpengalaman. Secara sederhana, creatine adalah suplemen yang efektif, terjangkau, dan berbukti kuat dalam meningkatkan performa. Jika tujuanmu adalah kekuatan dan progres konsisten, creatine adalah salah satu pilihan terbaik untuk mendukung perjalanan fitnessmu."
+            },
+            {
+                id: 4,
+                title: "Mindset Growth dalam Fitness",
+                excerpt: "Kembangkan pola pikir yang mendukung perjalanan fitness jangka panjang Anda.",
+                category: "umum",
+                readTime: "5 min",
+                date: "2 minggu lalu",
+                content: "Mindset growth dalam fitness berarti melihat proses latihan sebagai perjalanan jangka panjang, bukan pencapaian instan. Dengan pola pikir ini, setiap kegagalan, rasa lelah, atau stagnasi dianggap sebagai bagian dari proses belajar, bukan alasan untuk berhenti. Kamu memahami bahwa progres tidak selalu terlihat tiap minggu, tapi setiap upaya konsisten tetap membawa kamu selangkah lebih maju. Dalam fitness, mindset growth membantu kamu tetap disiplin, fokus, dan terbuka pada perubahan. Kamu tidak takut mencoba variasi baru, memperbaiki teknik, atau meningkatkan intensitas. Saat hasil belum terlihat, kamu tetap bertahan karena tahu bahwa perkembangan membutuhkan waktu. Dengan mindset seperti ini, latihan bukan sekadar rutinitas, tetapi investasi pada diri sendiri untuk menjadi lebih kuat, sehat, dan berdaya."
+            },
+            {
+                id: 5,
+                title: "Kalori vs Makro: Mana yang Lebih Penting?",
+                excerpt: "Pahami peran kalori dan makronutrien dalam mencapai tujuan fitness Anda.",
+                category: "nutrisi",
+                readTime: "9 min",
+                date: "3 hari lalu",
+                content: "Kalori menentukan apakah kamu akan turun, naik, atau mempertahankan berat badan. Jika kalori defisit, kamu akan kehilangan lemak; jika surplus, kamu akan menambah massa tubuh. Namun, makro—protein, karbohidrat, dan lemak—menentukan kualitas hasil yang kamu dapatkan dari kalori tersebut. Mengatur kalori saja bisa membuat berat badan berubah, tetapi tanpa makro yang tepat, komposisi tubuh tidak akan optimal. Protein memengaruhi pemulihan dan pembentukan otot, karbohidrat memberi energi untuk latihan, dan lemak penting untuk hormon serta kesehatan keseluruhan. Jadi, kalori menentukan arah, makro menentukan bentuk hasilnya. Keduanya penting, tetapi untuk performa dan body composition yang maksimal, mengatur makro dengan benar di dalam target kalori adalah kombinasi terbaik."
+            },
+            {
+                id: 6,
+                title: "Form Squat yang Benar dan Aman",
+                excerpt: "Pelajari teknik squat yang tepat untuk menghindari cedera dan maksimalkan hasil.",
+                category: "latihan",
+                readTime: "10 min",
+                date: "1 minggu lalu",
+                content: "Squat adalah salah satu gerakan dasar terbaik untuk membangun kekuatan kaki dan glutes, tetapi hanya efektif jika dilakukan dengan teknik yang benar. Mulailah dengan posisi kaki selebar bahu dan ujung jari sedikit mengarah ke luar. Jaga dada tetap tegak dan punggung netral—jangan membungkuk atau terlalu melengkung. Saat menurunkan tubuh, dorong pinggul ke belakang seolah duduk pada kursi, lalu turunkan hingga lutut membentuk sudut sekitar 90 derajat atau sedalam yang aman untuk mobilitasmu. Pastikan lutut mengikuti arah jari kaki dan tidak masuk ke dalam. Distribusikan beban pada tumit, bukan pada ujung kaki. Saat naik kembali, dorong lantai dengan tumit dan pertahankan posisi tubuh tetap stabil. Gerakan yang benar tidak hanya meningkatkan hasil latihan, tapi juga mencegah cedera lutut dan punggung. Dengan form yang tepat, squat menjadi latihan yang efektif, aman, dan sangat bermanfaat untuk kekuatan keseluruhan tubuh."
+            },
+            {
+                id: 7,
+                title: "Whey vs Plant Protein",
+                excerpt: "Bandingkan kelebihan dan kekurangan berbagai jenis protein bubuk.",
+                category: "suplement",
+                readTime: "8 min",
+                date: "4 hari lalu",
+                content: "Whey dan plant protein adalah dua sumber protein populer, namun keduanya punya keunggulan berbeda. Whey protein berasal dari susu dan dikenal memiliki profil asam amino lengkap serta penyerapan cepat. Ini membuatnya ideal untuk pemulihan otot setelah latihan, terutama bagi yang mengejar peningkatan massa otot. Sementara itu, plant protein dibuat dari tumbuhan seperti kacang polong, beras, atau campuran biji-bijian. Kandungan proteinnya umumnya lebih mudah dicerna bagi sebagian orang dan cocok untuk yang vegan atau sensitif terhadap produk susu. Walau penyerapan sedikit lebih lambat, kualitasnya tetap baik, terutama jika berasal dari kombinasi berbagai sumber tanaman. Kesimpulannya, pilih whey jika kamu ingin pemulihan cepat dan maksimal untuk pembangunan otot. Pilih plant protein jika kamu ingin opsi lebih ringan di perut, ramah vegan, dan tetap efektif memenuhi kebutuhan protein harianmu."
+            },
+            {
+                id: 8,
+                title: "Mengatasi Plateau dalam Latihan",
+                excerpt: "Strategi untuk terus membuat progres ketika hasil mulai stagnan.",
+                category: "umum",
+                readTime: "6 min",
+                date: "2 minggu lalu",
+                content: "Plateau dalam latihan adalah fase ketika progres tiba-tiba berhenti meskipun kamu sudah berlatih secara konsisten. Ini adalah hal yang wajar dan sering terjadi saat tubuh mulai beradaptasi dengan rutinitas yang sama. Untuk melewatinya, kamu perlu memberikan rangsangan baru pada tubuh, seperti mengganti variasi latihan, menambah intensitas secara bertahap, atau mengubah tempo gerakan. Selain itu, pemulihan yang cukup sangat penting. Kurang tidur, kurang asupan nutrisi, atau terlalu sering memaksakan tubuh justru bisa membuat progresmu semakin lambat. Kadang solusi terbaik adalah memberi waktu istirahat lebih lewat deload week supaya tubuh bisa kembali segar. Perbaikan teknik juga sering menjadi kunci. Latihan dengan form yang benar membuat otot bekerja lebih efektif sehingga perkembangan kembali muncul. Plateau bukan tanda kamu gagal—ini hanya sinyal bahwa sudah waktunya naik level."
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            displayArticles();
+        });
+
+        // Filter by category
+        function filterByCategory(category) {
+            currentCategory = category;
+            displayedArticles = 6;
+            
+            // Update title
+            const categoryNames = {
+                'nutrisi': 'Nutrisi',
+                'latihan': 'Latihan',
+                'suplement': 'Suplementasi',
+                'umum': 'Mindset',
+                'all': 'Semua Artikel'
+            };
+            
+            document.getElementById('articlesTitle').textContent = 
+                category === 'all' ? 'Semua Artikel' : `Artikel ${categoryNames[category]}`;
+            
+            displayArticles();
+        }
+
+        // Display articles
+        function displayArticles() {
+            let filteredArticles = [...articles];
+            
+            // Apply category filter
+            if (currentCategory !== 'all') {
+                filteredArticles = filteredArticles.filter(article => article.category === currentCategory);
+            }
+            
+            // Apply search
+            const searchTerm = document.getElementById('articleSearch').value.toLowerCase();
+            if (searchTerm) {
+                filteredArticles = filteredArticles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) ||
+                    article.excerpt.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply sort
+            const sortBy = document.getElementById('articleSort').value;
+            if (sortBy === 'newest') {
+                filteredArticles.sort((a, b) => b.id - a.id);
+            } else if (sortBy === 'reading') {
+                filteredArticles.sort((a, b) => {
+                    const timeA = parseInt(a.readTime);
+                    const timeB = parseInt(b.readTime);
+                    return timeB - timeA;
+                });
+            }
+            
+            // Display articles
+            const container = document.getElementById('articlesGrid');
+            container.innerHTML = filteredArticles.slice(0, displayedArticles).map(article => createArticleCard(article)).join('');
+        }
+
+        // Create article card
+        function createArticleCard(article) {
+            const categoryClasses = {
+                'nutrisi': 'category-nutrisi',
+                'latihan': 'category-latihan',
+                'suplement': 'category-suplement',
+                'umum': 'category-umum'
+            };
+            
+            const categoryNames = {
+                'nutrisi': 'Nutrisi',
+                'latihan': 'Latihan',
+                'suplement': 'Suplementasi',
+                'umum': 'Mindset'
+            };
+            
+            return `
+                <div class="kartu overflow-hidden hover:border-merah transition-all cursor-pointer" onclick="readArticle(${article.id})">
+                    <div class="p-6">
+                        <span class="${categoryClasses[article.category]} article-category">${categoryNames[article.category]}</span>
+                        <h3 class="font-bold text-lg mt-4 mb-3 line-clamp-2">${article.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-3">${article.excerpt}</p>
+                        
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span>${article.readTime} • ${article.date}</span>
+                            </div>
+                            <i class="fas fa-arrow-right text-merah"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load more articles
+        function loadMoreArticles() {
+            displayedArticles += 6;
+            displayArticles();
+        }
+
+        // Read article
+        function readArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (!article) return;
+            
+            const categoryClasses = {
+                'nutrisi': 'category-nutrisi',
+                'latihan': 'category-latihan',
+                'suplement': 'category-suplement',
+                'umum': 'category-umum'
+            };
+            
+            const categoryNames = {
+                'nutrisi': 'Nutrisi',
+                'latihan': 'Latihan',
+                'suplement': 'Suplementasi',
+                'umum': 'Mindset'
+            };
+            
+            document.getElementById('modalCategory').className = `article-category ${categoryClasses[article.category]}`;
+            document.getElementById('modalCategory').textContent = categoryNames[article.category];
+            document.getElementById('modalTitle').textContent = article.title;
+            document.getElementById('readTime').textContent = `Baca ${article.readTime}`;
+            document.getElementById('articleContent').innerHTML = article.content;
+            
+            document.getElementById('articleModal').classList.remove('hidden');
+        }
+
+        // Close article modal
+        function closeArticleModal() {
+            document.getElementById('articleModal').classList.add('hidden');
+        }
+
+        // Share article
+        function shareArticle() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('modalTitle').textContent,
+                    text: 'Baca artikel menarik tentang fitness!',
+                    url: window.location.href
+                });
+            } else {
+                alert('Link artikel telah disalin ke clipboard!');
+            }
+        }
+
+        // Bookmark article
+        function bookmarkArticle() {
+            const user = auth ? auth.getCurrentUser() : null;
+            if (!user) {
+                alert('Silakan login untuk menyimpan artikel!');
+                return;
+            }
+            alert('Artikel berhasil disimpan ke bookmark!');
+        }
+
+        // Toggle FAQ
+        function toggleFAQ(id) {
+            const content = document.getElementById(`faq-${id}`);
+            const icon = event.target.querySelector('i');
+            
+            content.classList.toggle('hidden');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        // Search articles
+        document.getElementById('articleSearch').addEventListener('input', function() {
+            displayArticles();
+        });
+
+        // Sort articles
+        document.getElementById('articleSort').addEventListener('change', function() {
+            displayArticles();
+        });
+    </script>
+</body>
+</html>
