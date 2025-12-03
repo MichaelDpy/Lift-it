@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Latihan - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            background: #0a0a0a; 
+            color: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        .kartu { 
+            background: #171717; 
+            border: 1px solid #333; 
+            border-radius: 12px; 
+        }
+        .tombol-merah { 
+            background: #dc2626; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tombol-merah:hover { 
+            background: #991b1b; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+        .tombol-hijau {
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tombol-hijau:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .program-tab { 
+            padding: 12px 24px; 
+            cursor: pointer; 
+            border-bottom: 3px solid transparent; 
+            background: none;
+            border: none;
+            color: #a0a0c0;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .program-tab.active { 
+            border-bottom-color: #dc2626; 
+            color: #dc2626; 
+            font-weight: 600;
+        }
+        .program-tab:hover {
+            color: #ffffff;
+        }
+        .exercise-set { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 16px; 
+            background: #262626; 
+            border-radius: 8px; 
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .exercise-set:hover {
+            background: #2d2d2d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .progress-circle { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            border: 2px solid #dc2626; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-weight: bold;
+            background: rgba(220, 38, 38, 0.1);
+        }
+        .completed {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+        }
+        .modal-open {
+            overflow: hidden;
+        }
+        .notification {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .checkmark {
+            animation: scaleUp 0.3s ease-out;
+        }
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0);
+            }
+            70% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center no-underline">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Menu -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white no-underline transition-colors">
+                        <i class="fas fa-home mr-2"></i> Beranda
+                    </a>
+                    <a href="latihan.html" class="text-merah font-semibold no-underline">
+                        <i class="fas fa-dumbbell mr-2"></i> Latihan
+                    </a>
+                    <a href="kalkulator.html" class="text-gray-300 hover:text-white no-underline transition-colors">
+                        <i class="fas fa-calculator mr-2"></i> Kalkulator
+                    </a>
+                    <a href="resep.html" class="text-gray-300 hover:text-white no-underline transition-colors">
+                        <i class="fas fa-utensils mr-2"></i> Resep
+                    </a>
+                    <a href="artikel.html" class="text-gray-300 hover:text-white no-underline transition-colors">
+                        <i class="fas fa-book-open mr-2"></i> Artikel
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-gray-300 text-xl hover:text-white transition-colors">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden mt-4 space-y-3">
+                <a href="index.html" class="block text-gray-300 hover:text-white py-2 no-underline transition-colors">
+                    <i class="fas fa-home mr-2"></i> Beranda
+                </a>
+                <a href="latihan.html" class="block text-merah font-semibold py-2 no-underline">
+                    <i class="fas fa-dumbbell mr-2"></i> Latihan
+                </a>
+                <a href="kalkulator.html" class="block text-gray-300 hover:text-white py-2 no-underline transition-colors">
+                    <i class="fas fa-calculator mr-2"></i> Kalkulator
+                </a>
+                <a href="resep.html" class="block text-gray-300 hover:text-white py-2 no-underline transition-colors">
+                    <i class="fas fa-utensils mr-2"></i> Resep
+                </a>
+                <a href="artikel.html" class="block text-gray-300 hover:text-white py-2 no-underline transition-colors">
+                    <i class="fas fa-book-open mr-2"></i> Artikel
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="fixed top-4 right-4 z-50 max-w-sm hidden">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto max-w-7xl">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                    <i class="fas fa-dumbbell text-merah mr-3"></i>
+                    Program Latihan Terstruktur
+                </h1>
+                <p class="text-gray-400 text-base md:text-lg">
+                    Pilih program yang sesuai dengan tujuan dan level Anda. Dilengkapi dengan video panduan.
+                </p>
+                
+                <!-- Progress Summary -->
+                <div class="mt-6 p-4 bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-gray-700 rounded-lg max-w-2xl mx-auto">
+                    <div class="flex items-center justify-center space-x-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-merah" id="totalSelesai">0</div>
+                            <div class="text-sm text-gray-400">Total Selesai</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-400" id="streakHari">0</div>
+                            <div class="text-sm text-gray-400">Streak Hari</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-400" id="totalWaktu">0</div>
+                            <div class="text-sm text-gray-400">Menit Latihan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Program Tabs -->
+            <div class="flex flex-wrap gap-2 md:gap-0 border-b border-abu-border mb-8 overflow-x-auto">
+                <button class="program-tab active" onclick="switchProgram('pushpull')">
+                    <i class="fas fa-sync-alt mr-2"></i> Push-Pull-Legs
+                </button>
+                <button class="program-tab" onclick="switchProgram('upperlower')">
+                    <i class="fas fa-exchange-alt mr-2"></i> Upper-Lower
+                </button>
+                <button class="program-tab" onclick="switchProgram('fullbody')">
+                    <i class="fas fa-user mr-2"></i> Full Body
+                </button>
+                <button class="program-tab" onclick="switchProgram('beginner')">
+                    <i class="fas fa-seedling mr-2"></i> Pemula
+                </button>
+                <button class="program-tab" onclick="switchProgram('strength')">
+                    <i class="fas fa-bolt mr-2"></i> Strength
+                </button>
+            </div>
+
+            <!-- Program Description -->
+            <div class="kartu p-6 md:p-8 mb-8">
+                <div class="flex flex-col md:flex-row md:items-start gap-8">
+                    <!-- Program Info -->
+                    <div class="md:w-2/3">
+                        <h2 id="programTitle" class="text-2xl font-bold mb-4">Push-Pull-Legs (PPL)</h2>
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-merah mr-2"></i>
+                                <span id="programDays">6 hari/minggu</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-merah mr-2"></i>
+                                <span id="programDuration">60-75 menit/sesi</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-fire text-merah mr-2"></i>
+                                <span id="programLevel">Intermediate - Advanced</span>
+                            </div>
+                        </div>
+                        
+                        <p id="programDescription" class="text-gray-300 mb-6">
+                            Program Push-Pull-Legs membagi latihan menjadi tiga kategori: Push (dorong), Pull (tarik), dan Legs (kaki). 
+                            Program ini optimal untuk perkembangan otot yang seimbang dan cocok untuk natural lifters.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" id="programFocus">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        
+                        <button onclick="startProgram()" class="tombol-merah px-6 md:px-8 py-3 w-full md:w-auto">
+                            <i class="fas fa-play mr-2"></i> Mulai Program Ini
+                        </button>
+                    </div>
+                    
+                    <!-- Schedule -->
+                    <div class="md:w-1/3">
+                        <h3 class="font-bold mb-4 text-gray-300">Jadwal Mingguan</h3>
+                        <div class="space-y-2" id="programSchedule">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workout Days -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Detail Latihan per Hari</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-400" id="workoutStatus">Belum dimulai</span>
+                        <div id="workoutIndicator" class="w-3 h-3 bg-gray-600 rounded-full"></div>
+                    </div>
+                </div>
+                
+                <!-- Day Tabs -->
+                <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto" id="dayTabs">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
+                <!-- Workout Content -->
+                <div id="workoutContent">
+                    <!-- Content will be loaded by JavaScript -->
+                </div>
+                
+                <!-- Complete Button -->
+                <div class="mt-8 text-center">
+                    <button onclick="markWorkoutComplete()" class="tombol-hijau px-8 py-3 text-lg">
+                        <i class="fas fa-check-circle mr-2"></i> Tandai Latihan Ini Selesai
+                    </button>
+                    <p class="text-gray-400 text-sm mt-2">Klik untuk mencatat latihan hari ini selesai</p>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="kartu p-6 md:p-8 mb-8">
+                <h2 class="text-2xl font-bold mb-6">Progress Latihan</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center p-6 bg-gray-900 rounded-xl">
+                        <div class="text-3xl font-bold text-merah mb-2" id="totalWorkouts">0</div>
+                        <div class="text-gray-400">Total Selesai</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-900 rounded-xl">
+                        <div class="text-3xl font-bold text-blue-400 mb-2" id="currentStreak">0</div>
+                        <div class="text-gray-400">Streak Hari</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-900 rounded-xl">
+                        <div class="text-3xl font-bold text-green-400 mb-2" id="totalMinutes">0</div>
+                        <div class="text-gray-400">Menit Latihan</div>
+                    </div>
+                </div>
+                
+                <!-- Today's Progress -->
+                <div class="mb-6">
+                    <h3 class="font-bold mb-4 text-gray-300">Hari Ini</h3>
+                    <div class="space-y-4" id="todayProgress">
+                        <div class="p-4 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-medium">Status Hari Ini</span>
+                                <span class="px-3 py-1 bg-gray-700 rounded-full text-sm" id="todayStatus">Belum latihan</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div class="text-sm text-gray-400">Waktu Latihan</div>
+                                    <div class="font-medium" id="todayDuration">0 menit</div>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-gray-400">Kalori Terbakar</div>
+                                    <div class="font-medium" id="todayCalories">0 kcal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Workouts -->
+                <div>
+                    <h3 class="font-bold mb-4 text-gray-300">Latihan Terakhir</h3>
+                    <div class="space-y-3" id="recentWorkouts">
+                        <!-- Recent workouts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+          
+
+    <!-- Exercise Modal -->
+    <div id="exerciseModal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 overflow-y-auto">
+        <div class="container mx-auto px-4 py-8 max-w-3xl">
+            <div class="kartu">
+                <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                    <h2 id="exerciseTitle" class="text-2xl font-bold">Detail Gerakan</h2>
+                    <button onclick="closeExerciseModal()" class="text-gray-400 hover:text-white text-2xl transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6" id="exerciseContent">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Global variables
+        let currentProgram = 'pushpull';
+        let currentDay = 'push';
+        let todayCompleted = false;
+        
+        // Complete workout programs data
+        const programs = {
+            pushpull: {
+                title: "Push-Pull-Legs (PPL)",
+                description: "Program Push-Pull-Legs membagi latihan menjadi tiga kategori: Push (dorong), Pull (tarik), dan Legs (kaki). Program ini optimal untuk perkembangan otot yang seimbang dan cocok untuk natural lifters.",
+                days: 6,
+                duration: "60-75 menit",
+                level: "Intermediate - Advanced",
+                schedule: [
+                    { day: "Senin", type: "push" },
+                    { day: "Selasa", type: "pull" },
+                    { day: "Rabu", type: "legs" },
+                    { day: "Kamis", type: "push" },
+                    { day: "Jumat", type: "pull" },
+                    { day: "Sabtu", type: "legs" },
+                    { day: "Minggu", type: "rest" }
+                ],
+                workouts: {
+                    push: {
+                        title: "Push Day",
+                        focus: "Dada, Bahu, Triceps",
+                        duration: 75,
+                        calories: 450,
+                        exercises: [
+                            { name: "Bench Press", sets: 4, reps: "8-12", rest: "90s", video: "https://www.youtube.com/embed/rT7DgCr-3pg" },
+                            { name: "Incline Dumbbell Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=8iPEnn-ltC8" },
+                            { name: "Shoulder Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=QAQ64hK4Xxs" },
+                            { name: "Lateral Raises", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=3VcKaXpzqRo" },
+                            { name: "Triceps Pushdown", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=vB5OHsJ3EME" },
+                            { name: "Overhead Triceps Extension", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=-Vyt2QdsR7E" }
+                        ]
+                    },
+                    pull: {
+                        title: "Pull Day",
+                        focus: "Punggung, Biceps",
+                        duration: 70,
+                        calories: 420,
+                        exercises: [
+                            { name: "Pull-ups", sets: 4, reps: "AMRAP", rest: "90s", video: "https://www.youtube.com/watch?v=eGo4IYlbE5g" },
+                            { name: "Barbell Rows", sets: 4, reps: "8-12", rest: "90s", video: "https://www.youtube.com/watch?v=9efgcAjQe7E" },
+                            { name: "Lat Pulldown", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=CAwf7n6Luuc" },
+                            { name: "Seated Cable Rows", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=GZbfZ033f74" },
+                            { name: "Barbell Curls", sets: 3, reps: "10-12", rest: "60s", video: "https://www.youtube.com/watch?v=kwG2ipFRgfo" },
+                            { name: "Hammer Curls", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=TwD-YGVP4Bk" }
+                        ]
+                    },
+                    legs: {
+                        title: "Legs Day",
+                        focus: "Kaki, Glutes",
+                        duration: 80,
+                        calories: 500,
+                        exercises: [
+                            { name: "Squats", sets: 4, reps: "8-12", rest: "120s", video: "https://www.youtube.com/watch?v=gcNh17Ckjgg" },
+                            { name: "Romanian Deadlifts", sets: 4, reps: "8-12", rest: "90s", video: "https://www.youtube.com/watch?v=JCXUYuzwNrM" },
+                            { name: "Leg Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=IZxyjW7MPJQ" },
+                            { name: "Leg Extensions", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=YyvSfVjQeL0" },
+                            { name: "Lying Leg Curls", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=1Tq3QdYUuHs" },
+                            { name: "Calf Raises", sets: 4, reps: "15-20", rest: "60s", video: "https://www.youtube.com/watch?v=-M4-G8p8fmc" }
+                        ]
+                    },
+                    rest: {
+                        title: "Rest Day",
+                        focus: "Recovery",
+                        duration: 30,
+                        calories: 150,
+                        exercises: [
+                            { name: "Light Cardio", sets: 1, reps: "20-30 min", rest: "-", video: "" },
+                            { name: "Stretching", sets: 1, reps: "10-15 min", rest: "-", video: "" },
+                            { name: "Foam Rolling", sets: 1, reps: "10 min", rest: "-", video: "" }
+                        ]
+                    }
+                }
+            },
+            upperlower: {
+                title: "Upper-Lower Split",
+                description: "Program yang membagi latihan menjadi upper body dan lower body, cocok untuk intermediate lifters. Fokus pada perkembangan otot yang seimbang antara tubuh atas dan bawah.",
+                days: 4,
+                duration: "60-70 menit",
+                level: "Intermediate",
+                schedule: [
+                    { day: "Senin", type: "upper" },
+                    { day: "Selasa", type: "lower" },
+                    { day: "Rabu", type: "rest" },
+                    { day: "Kamis", type: "upper" },
+                    { day: "Jumat", type: "lower" },
+                    { day: "Sabtu", type: "rest" },
+                    { day: "Minggu", type: "rest" }
+                ],
+                workouts: {
+                    upper: {
+                        title: "Upper Body Day",
+                        focus: "Dada, Punggung, Bahu, Lengan",
+                        duration: 70,
+                        calories: 400,
+                        exercises: [
+                            { name: "Bench Press", sets: 4, reps: "8-12", rest: "90s", video: "https://www.youtube.com/watch?v=rT7DgCr-3pg" },
+                            { name: "Pull-ups", sets: 4, reps: "AMRAP", rest: "90s", video: "https://www.youtube.com/watch?v=eGo4IYlbE5g" },
+                            { name: "Shoulder Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=QAQ64hK4Xxs" },
+                            { name: "Barbell Rows", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=9efgcAjQe7E" },
+                            { name: "Bicep Curls", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=kwG2ipFRgfo" },
+                            { name: "Triceps Pushdown", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=vB5OHsJ3EME" }
+                        ]
+                    },
+                    lower: {
+                        title: "Lower Body Day",
+                        focus: "Kaki, Glutes",
+                        duration: 75,
+                        calories: 450,
+                        exercises: [
+                            { name: "Squats", sets: 4, reps: "8-12", rest: "120s", video: "https://www.youtube.com/watch?v=gcNh17Ckjgg" },
+                            { name: "Romanian Deadlifts", sets: 4, reps: "8-12", rest: "90s", video: "https://www.youtube.com/watch?v=JCXUYuzwNrM" },
+                            { name: "Leg Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=IZxyjW7MPJQ" },
+                            { name: "Leg Curls", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=1Tq3QdYUuHs" },
+                            { name: "Leg Extensions", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=YyvSfVjQeL0" },
+                            { name: "Calf Raises", sets: 4, reps: "15-20", rest: "60s", video: "https://www.youtube.com/watch?v=-M4-G8p8fmc" }
+                        ]
+                    },
+                    rest: {
+                        title: "Rest Day",
+                        focus: "Recovery",
+                        duration: 30,
+                        calories: 150,
+                        exercises: [
+                            { name: "Light Cardio", sets: 1, reps: "20-30 min", rest: "-", video: "" },
+                            { name: "Stretching", sets: 1, reps: "10-15 min", rest: "-", video: "" },
+                            { name: "Foam Rolling", sets: 1, reps: "10 min", rest: "-", video: "" }
+                        ]
+                    }
+                }
+            },
+            fullbody: {
+                title: "Full Body Workout",
+                description: "Program full body yang melatih semua kelompok otot dalam satu sesi. Cocok untuk pemula atau mereka yang memiliki waktu terbatas. Fokus pada compound movements.",
+                days: 3,
+                duration: "45-60 menit",
+                level: "Beginner - Intermediate",
+                schedule: [
+                    { day: "Senin", type: "fullbody" },
+                    { day: "Selasa", type: "rest" },
+                    { day: "Rabu", type: "fullbody" },
+                    { day: "Kamis", type: "rest" },
+                    { day: "Jumat", type: "fullbody" },
+                    { day: "Sabtu", type: "rest" },
+                    { day: "Minggu", type: "rest" }
+                ],
+                workouts: {
+                    fullbody: {
+                        title: "Full Body Workout",
+                        focus: "Seluruh Tubuh - Dada, Punggung, Kaki, Bahu",
+                        duration: 60,
+                        calories: 350,
+                        exercises: [
+                            { name: "Squats", sets: 3, reps: "10-12", rest: "90s", video: "https://www.youtube.com/watch?v=gcNh17Ckjgg" },
+                            { name: "Bench Press", sets: 3, reps: "10-12", rest: "90s", video: "https://www.youtube.com/watch?v=rT7DgCr-3pg" },
+                            { name: "Bent Over Rows", sets: 3, reps: "10-12", rest: "90s", video: "https://www.youtube.com/watch?v=9efgcAjQe7E" },
+                            { name: "Overhead Press", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=QAQ64hK4Xxs" },
+                            { name: "Romanian Deadlifts", sets: 3, reps: "10-12", rest: "75s", video: "https://www.youtube.com/watch?v=JCXUYuzwNrM" },
+                            { name: "Plank", sets: 3, reps: "30-60s", rest: "60s", video: "https://www.youtube.com/watch?v=pSHjTRCQxIw" },
+                            { name: "Bicep Curls", sets: 2, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=kwG2ipFRgfo" },
+                            { name: "Triceps Pushdown", sets: 2, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=vB5OHsJ3EME" }
+                        ]
+                    },
+                    rest: {
+                        title: "Rest Day",
+                        focus: "Recovery",
+                        duration: 30,
+                        calories: 150,
+                        exercises: [
+                            { name: "Light Cardio", sets: 1, reps: "20-30 min", rest: "-", video: "" },
+                            { name: "Stretching", sets: 1, reps: "10-15 min", rest: "-", video: "" },
+                            { name: "Foam Rolling", sets: 1, reps: "10 min", rest: "-", video: "" }
+                        ]
+                    }
+                }
+            },
+            beginner: {
+                title: "Program Pemula",
+                description: "Program khusus untuk pemula dengan fokus pada form yang benar dan membangun dasar yang kuat. Intensitas rendah untuk menghindari cedera.",
+                days: 3,
+                duration: "30-45 menit",
+                level: "Beginner",
+                schedule: [
+                    { day: "Senin", type: "beginner" },
+                    { day: "Selasa", type: "rest" },
+                    { day: "Rabu", type: "beginner" },
+                    { day: "Kamis", type: "rest" },
+                    { day: "Jumat", type: "beginner" },
+                    { day: "Sabtu", type: "rest" },
+                    { day: "Minggu", type: "rest" }
+                ],
+                workouts: {
+                    beginner: {
+                        title: "Workout Pemula",
+                        focus: "Form Dasar dan Stabilitas",
+                        duration: 45,
+                        calories: 250,
+                        exercises: [
+                            { name: "Bodyweight Squats", sets: 3, reps: "15-20", rest: "60s", video: "https://www.youtube.com/watch?v=aclHkVaku9U" },
+                            { name: "Push-ups (modified)", sets: 3, reps: "8-12", rest: "60s", video: "https://www.youtube.com/watch?v=IODxDxX7oi4" },
+                            { name: "Assisted Pull-ups", sets: 3, reps: "6-10", rest: "60s", video: "https://www.youtube.com/watch?v=2B7VzX8l9eI" },
+                            { name: "Dumbbell Rows", sets: 3, reps: "10-12", rest: "60s", video: "https://www.youtube.com/watch?v=roCP6wCXPqo" },
+                            { name: "Plank", sets: 3, reps: "20-30s", rest: "45s", video: "https://www.youtube.com/watch?v=pSHjTRCQxIw" },
+                            { name: "Glute Bridges", sets: 3, reps: "15-20", rest: "45s", video: "https://www.youtube.com/watch?v=OUgsJ8-Vi0E" },
+                            { name: "Bird Dogs", sets: 3, reps: "10-12 per sisi", rest: "45s", video: "https://www.youtube.com/watch?v=wiFNA3sqjCA" },
+                            { name: "Wall Sit", sets: 3, reps: "30-45s", rest: "60s", video: "https://www.youtube.com/watch?v=-cdph8hv0O0" }
+                        ]
+                    },
+                    rest: {
+                        title: "Rest Day",
+                        focus: "Recovery",
+                        duration: 30,
+                        calories: 150,
+                        exercises: [
+                            { name: "Light Walking", sets: 1, reps: "20-30 min", rest: "-", video: "" },
+                            { name: "Full Body Stretching", sets: 1, reps: "10-15 min", rest: "-", video: "" },
+                            { name: "Foam Rolling", sets: 1, reps: "10 min", rest: "-", video: "" }
+                        ]
+                    }
+                }
+            },
+            strength: {
+                title: "Strength Focus Program",
+                description: "Program untuk meningkatkan kekuatan maksimal dengan fokus pada compound lifts berat dan reps rendah. Cocok untuk advanced lifters yang ingin meningkatkan 1RM.",
+                days: 4,
+                duration: "75-90 menit",
+                level: "Advanced",
+                schedule: [
+                    { day: "Senin", type: "strength" },
+                    { day: "Selasa", type: "accessory" },
+                    { day: "Rabu", type: "rest" },
+                    { day: "Kamis", type: "strength" },
+                    { day: "Jumat", type: "accessory" },
+                    { day: "Sabtu", type: "rest" },
+                    { day: "Minggu", type: "rest" }
+                ],
+                workouts: {
+                    strength: {
+                        title: "Strength Day",
+                        focus: "Kekuatan Maksimal - Compound Lifts",
+                        duration: 90,
+                        calories: 500,
+                        exercises: [
+                            { name: "Squats (Heavy)", sets: 5, reps: "3-5", rest: "180s", video: "https://www.youtube.com/watch?v=gcNh17Ckjgg" },
+                            { name: "Bench Press (Heavy)", sets: 5, reps: "3-5", rest: "180s", video: "https://www.youtube.com/watch?v=rT7DgCr-3pg" },
+                            { name: "Deadlifts (Heavy)", sets: 3, reps: "3-5", rest: "180s", video: "https://www.youtube.com/watch?v=op9kVnSso6Q" },
+                            { name: "Overhead Press", sets: 3, reps: "5-8", rest: "120s", video: "https://www.youtube.com/watch?v=QAQ64hK4Xxs" },
+                            { name: "Weighted Pull-ups", sets: 4, reps: "5-8", rest: "120s", video: "https://www.youtube.com/watch?v=eGo4IYlbE5g" },
+                            { name: "Barbell Rows", sets: 3, reps: "5-8", rest: "120s", video: "https://www.youtube.com/watch?v=9efgcAjQe7E" }
+                        ]
+                    },
+                    accessory: {
+                        title: "Accessory Day",
+                        focus: "Otot Pendukung dan Volume",
+                        duration: 75,
+                        calories: 400,
+                        exercises: [
+                            { name: "Romanian Deadlifts", sets: 4, reps: "8-10", rest: "90s", video: "https://www.youtube.com/watch?v=JCXUYuzwNrM" },
+                            { name: "Incline Bench Press", sets: 4, reps: "8-10", rest: "90s", video: "https://www.youtube.com/watch?v=8iPEnn-ltC8" },
+                            { name: "Pendlay Rows", sets: 4, reps: "8-10", rest: "90s", video: "https://www.youtube.com/watch?v=FWJR5Ve8bnQ" },
+                            { name: "Close Grip Bench Press", sets: 3, reps: "8-10", rest: "75s", video: "https://www.youtube.com/watch?v=nEF0bv2FW94" },
+                            { name: "Face Pulls", sets: 3, reps: "12-15", rest: "60s", video: "https://www.youtube.com/watch?v=rep-qVOkqgk" },
+                            { name: "Cable Crunches", sets: 3, reps: "15-20", rest: "60s", video: "https://www.youtube.com/watch?v=_M2Etme-tfE" },
+                            { name: "Hammer Curls", sets: 3, reps: "10-12", rest: "60s", video: "https://www.youtube.com/watch?v=TwD-YGVP4Bk" },
+                            { name: "Triceps Extensions", sets: 3, reps: "10-12", rest: "60s", video: "https://www.youtube.com/watch?v=-Vyt2QdsR7E" }
+                        ]
+                    },
+                    rest: {
+                        title: "Rest Day",
+                        focus: "Recovery",
+                        duration: 30,
+                        calories: 150,
+                        exercises: [
+                            { name: "Light Cardio", sets: 1, reps: "20-30 min", rest: "-", video: "" },
+                            { name: "Mobility Work", sets: 1, reps: "15-20 min", rest: "-", video: "" },
+                            { name: "Foam Rolling", sets: 1, reps: "10 min", rest: "-", video: "" }
+                        ]
+                    }
+                }
+            }
+        };
+
+        // Exercise library
+        const exercises = [
+            { name: "Bench Press", muscle: "Chest", equipment: "Barbell", video: "https://www.youtube.com/watch?v=rT7DgCr-3pg" },
+            { name: "Squats", muscle: "Legs", equipment: "Barbell", video: "https://www.youtube.com/watch?v=gcNh17Ckjgg" },
+            { name: "Deadlifts", muscle: "Back", equipment: "Barbell", video: "https://www.youtube.com/watch?v=op9kVnSso6Q" },
+            { name: "Pull-ups", muscle: "Back", equipment: "Bodyweight", video: "https://www.youtube.com/watch?v=eGo4IYlbE5g" },
+            { name: "Shoulder Press", muscle: "Shoulders", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=QAQ64hK4Xxs" },
+            { name: "Barbell Rows", muscle: "Back", equipment: "Barbell", video: "https://www.youtube.com/watch?v=9efgcAjQe7E" },
+            { name: "Bicep Curls", muscle: "Biceps", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=kwG2ipFRgfo" },
+            { name: "Triceps Pushdown", muscle: "Triceps", equipment: "Cable", video: "https://www.youtube.com/watch?v=vB5OHsJ3EME" },
+            { name: "Leg Press", muscle: "Legs", equipment: "Machine", video: "https://www.youtube.com/watch?v=IZxyjW7MPJQ" },
+            { name: "Lunges", muscle: "Legs", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=D7KaRcUTQeE" },
+            { name: "Lat Pulldown", muscle: "Back", equipment: "Cable", video: "https://www.youtube.com/watch?v=CAwf7n6Luuc" },
+            { name: "Chest Fly", muscle: "Chest", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=eozdVDA78K0" },
+            { name: "Cable Crossover", muscle: "Chest", equipment: "Cable", video: "https://www.youtube.com/watch?v=taI4XduLpTk" },
+            { name: "Leg Curls", muscle: "Legs", equipment: "Machine", video: "https://www.youtube.com/watch?v=1Tq3QdYUuHs" },
+            { name: "Leg Extensions", muscle: "Legs", equipment: "Machine", video: "https://www.youtube.com/watch?v=YyvSfVjQeL0" },
+            { name: "Calf Raises", muscle: "Legs", equipment: "Machine", video: "https://www.youtube.com/watch?v=-M4-G8p8fmc" },
+            { name: "Plank", muscle: "Core", equipment: "Bodyweight", video: "https://www.youtube.com/watch?v=pSHjTRCQxIw" },
+            { name: "Russian Twists", muscle: "Core", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=wkD8rjkodUI" },
+            { name: "Face Pulls", muscle: "Shoulders", equipment: "Cable", video: "https://www.youtube.com/watch?v=rep-qVOkqgk" },
+            { name: "Lateral Raises", muscle: "Shoulders", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=3VcKaXpzqRo" },
+            { name: "Romanian Deadlifts", muscle: "Legs", equipment: "Barbell", video: "https://www.youtube.com/watch?v=JCXUYuzwNrM" },
+            { name: "Incline Bench Press", muscle: "Chest", equipment: "Barbell", video: "https://www.youtube.com/watch?v=8iPEnn-ltC8" },
+            { name: "Hammer Curls", muscle: "Biceps", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=TwD-YGVP4Bk" },
+            { name: "Overhead Triceps Extension", muscle: "Triceps", equipment: "Dumbbell", video: "https://www.youtube.com/watch?v=-Vyt2QdsR7E" }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    } else {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    }
+                });
+            }
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuButton.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Initialize program
+            loadProgram();
+            loadExerciseLibrary();
+            updateProgress();
+            checkTodayWorkout();
+            
+            // Search exercises
+            document.getElementById('exerciseSearch').addEventListener('input', function() {
+                loadExerciseLibrary();
+            });
+        });
+
+        // Switch program
+        function switchProgram(programId) {
+            // Update tabs
+            document.querySelectorAll('.program-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            let clickedTab = event.target;
+            if (clickedTab.tagName === 'I') {
+                clickedTab = clickedTab.parentElement;
+            }
+            
+            clickedTab.classList.add('active');
+            
+            currentProgram = programId;
+            loadProgram();
+            checkTodayWorkout();
+        }
+
+        // Load program
+        function loadProgram() {
+            const program = programs[currentProgram];
+            
+            if (!program) return;
+            
+            // Update program info
+            document.getElementById('programTitle').textContent = program.title;
+            document.getElementById('programDescription').textContent = program.description;
+            document.getElementById('programDays').textContent = program.days + " hari/minggu";
+            document.getElementById('programDuration').textContent = program.duration;
+            document.getElementById('programLevel').textContent = program.level;
+            
+            // Update program focus
+            const focusContainer = document.getElementById('programFocus');
+            if (currentProgram === 'pushpull') {
+                focusContainer.innerHTML = `
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-merah mb-2">Push</div>
+                        <div class="text-sm text-gray-400">Dada, Bahu, Triceps</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-blue-400 mb-2">Pull</div>
+                        <div class="text-sm text-gray-400">Punggung, Biceps</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-green-400 mb-2">Legs</div>
+                        <div class="text-sm text-gray-400">Kaki, Glutes</div>
+                    </div>
+                `;
+            } else if (currentProgram === 'upperlower') {
+                focusContainer.innerHTML = `
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-merah mb-2">Upper</div>
+                        <div class="text-sm text-gray-400">Dada, Punggung, Bahu, Lengan</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-blue-400 mb-2">Lower</div>
+                        <div class="text-sm text-gray-400">Kaki, Glutes, Core</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-green-400 mb-2">Rest</div>
+                        <div class="text-sm text-gray-400">Recovery Day</div>
+                    </div>
+                `;
+            } else if (currentProgram === 'fullbody') {
+                focusContainer.innerHTML = `
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-merah mb-2">Full Body</div>
+                        <div class="text-sm text-gray-400">Semua Otot</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-blue-400 mb-2">Compound</div>
+                        <div class="text-sm text-gray-400">Multi-joint Exercises</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-green-400 mb-2">Efisien</div>
+                        <div class="text-sm text-gray-400">3x seminggu</div>
+                    </div>
+                `;
+            } else if (currentProgram === 'beginner') {
+                focusContainer.innerHTML = `
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-merah mb-2">Dasar</div>
+                        <div class="text-sm text-gray-400">Form & Teknik</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-blue-400 mb-2">Ringan</div>
+                        <div class="text-sm text-gray-400">Intensitas Rendah</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-green-400 mb-2">Konsisten</div>
+                        <div class="text-sm text-gray-400">3x seminggu</div>
+                    </div>
+                `;
+            } else if (currentProgram === 'strength') {
+                focusContainer.innerHTML = `
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-merah mb-2">Strength</div>
+                        <div class="text-sm text-gray-400">Compound Lifts Berat</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-blue-400 mb-2">Accessory</div>
+                        <div class="text-sm text-gray-400">Otot Pendukung</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-lg">
+                        <div class="text-xl font-bold text-green-400 mb-2">Recovery</div>
+                        <div class="text-sm text-gray-400">Penting untuk Strength</div>
+                    </div>
+                `;
+            }
+            
+            // Update schedule
+            const scheduleContainer = document.getElementById('programSchedule');
+            scheduleContainer.innerHTML = program.schedule.map(item => {
+                let colorClass = "text-gray-400";
+                if (item.type === 'push' || item.type === 'strength') colorClass = "text-merah font-bold";
+                else if (item.type === 'pull' || item.type === 'accessory') colorClass = "text-blue-400 font-bold";
+                else if (item.type === 'legs' || item.type === 'lower') colorClass = "text-green-400 font-bold";
+                else if (item.type === 'upper') colorClass = "text-yellow-400 font-bold";
+                else if (item.type === 'fullbody' || item.type === 'beginner') colorClass = "text-purple-400 font-bold";
+                
+                return `
+                    <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
+                        <span class="font-medium">${item.day}</span>
+                        <span class="${colorClass}">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update day tabs
+            const dayTabsContainer = document.getElementById('dayTabs');
+            const workoutTypes = Object.keys(program.workouts);
+            
+            dayTabsContainer.innerHTML = workoutTypes.map(type => {
+                const workout = program.workouts[type];
+                return `
+                    <button onclick="showDay('${type}')" class="program-tab ${type === currentDay ? 'active' : ''}">
+                        ${workout.title}
+                    </button>
+                `;
+            }).join('');
+            
+            // Load workout for first day
+            if (program.workouts[currentDay]) {
+                showDay(currentDay);
+            } else {
+                currentDay = workoutTypes[0];
+                showDay(currentDay);
+            }
+        }
+
+        // Show day workout
+        function showDay(day) {
+            currentDay = day;
+            
+            // Update day tabs
+            const dayTabs = document.querySelectorAll('#dayTabs .program-tab');
+            dayTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Find and activate the clicked tab
+            let clickedTab = event ? event.target : null;
+            if (clickedTab) {
+                if (clickedTab.tagName === 'I') {
+                    clickedTab = clickedTab.parentElement;
+                }
+                clickedTab.classList.add('active');
+            } else {
+                // If no event (initial load), activate first tab
+                dayTabs.forEach((tab, index) => {
+                    if (tab.textContent.trim().includes(programs[currentProgram].workouts[day].title)) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
+            
+            const program = programs[currentProgram];
+            if (!program || !program.workouts[day]) return;
+            
+            const workout = program.workouts[day];
+            const container = document.getElementById('workoutContent');
+            
+            container.innerHTML = `
+                <div class="kartu p-6 md:p-8">
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+                        <div>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2">${workout.title}</h3>
+                            <p class="text-gray-400">Fokus: <span class="text-merah font-medium">${workout.focus}</span></p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-center">
+                                <div class="text-lg md:text-xl font-bold">${workout.exercises.length}</div>
+                                <div class="text-sm text-gray-400">Gerakan</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-lg md:text-xl font-bold">${workout.exercises.reduce((sum, ex) => sum + ex.sets, 0)}</div>
+                                <div class="text-sm text-gray-400">Total Set</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-lg md:text-xl font-bold">${workout.duration}m</div>
+                                <div class="text-sm text-gray-400">Estimasi Waktu</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        ${workout.exercises.map((exercise, index) => `
+                            <div class="exercise-set">
+                                <div class="flex items-center">
+                                    <div class="progress-circle mr-4">${index + 1}</div>
+                                    <div>
+                                        <h4 class="font-bold text-base md:text-lg">${exercise.name}</h4>
+                                        <p class="text-sm text-gray-400">${exercise.sets} set × ${exercise.reps} reps</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3 md:space-x-4">
+                                    <span class="text-gray-400 text-sm md:text-base">Rest: ${exercise.rest}</span>
+                                    ${exercise.video ? `
+                                    <button onclick="showExerciseVideo('${exercise.name}', '${exercise.video}')" 
+                                            class="text-merah hover:text-red-400 text-lg transition-colors" 
+                                            title="Lihat video">
+                                        <i class="fas fa-play-circle"></i>
+                                    </button>` : ''}
+                                    <button onclick="logExerciseSet('${exercise.name}')" 
+                                            class="px-3 py-1 bg-gray-800 rounded text-sm hover:bg-gray-700 transition-colors">
+                                        Selesai
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h4 class="font-bold mb-4 text-gray-300">Tips Latihan</h4>
+                        <ul class="space-y-2 text-sm md:text-base text-gray-300">
+                            <li><i class="fas fa-check text-merah mr-2"></i> Fokus pada form yang benar daripada beban berat</li>
+                            <li><i class="fas fa-check text-merah mr-2"></i> Istirahat sesuai waktu yang direkomendasikan</li>
+                            <li><i class="fas fa-check text-merah mr-2"></i> Catat beban yang digunakan untuk progressive overload</li>
+                            <li><i class="fas fa-check text-merah mr-2"></i> Lakukan pemanasan 5-10 menit sebelum latihan</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show exercise video
+        function showExerciseVideo(name, videoUrl) {
+            document.getElementById('exerciseTitle').textContent = name;
+            document.getElementById('exerciseContent').innerHTML = `
+                <div class="mb-6">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe src="${videoUrl.replace('watch?v=', 'embed/')}" 
+                                class="w-full h-48 md:h-64 rounded-lg" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-3 text-gray-300">Tips Eksekusi</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li><i class="fas fa-dumbbell text-merah mr-2"></i> Kontraksi otot target dengan maksimal</li>
+                            <li><i class="fas fa-clock text-merah mr-2"></i> Kontrol gerakan naik dan turun</li>
+                            <li><i class="fas fa-user text-merah mr-2"></i> Jaga postur tubuh yang benar</li>
+                            <li><i class="fas fa-heart text-merah mr-2"></i> Jangan menahan napas</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-3 text-gray-300">Common Mistakes</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li><i class="fas fa-times text-red-400 mr-2"></i> Menggunakan momentum berlebihan</li>
+                            <li><i class="fas fa-times text-red-400 mr-2"></i> Range of motion tidak lengkap</li>
+                            <li><i class="fas fa-times text-red-400 mr-2"></i> Beban terlalu berat untuk form yang baik</li>
+                            <li><i class="fas fa-times text-red-400 mr-2"></i> Tidak melakukan pemanasan yang cukup</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('exerciseModal').classList.remove('hidden');
+        }
+
+        // Close exercise modal
+        function closeExerciseModal() {
+            document.getElementById('exerciseModal').classList.add('hidden');
+        }
+
+        // Start program
+        function startProgram() {
+            const program = programs[currentProgram];
+            showNotification(`Program "${program.title}" telah dimulai!`, 'success');
+            
+            // Update UI
+            document.getElementById('workoutStatus').textContent = 'Sedang berjalan';
+            document.getElementById('workoutIndicator').style.backgroundColor = '#10b981';
+        }
+
+        // Mark workout as complete
+        function markWorkoutComplete() {
+            const program = programs[currentProgram];
+            const workout = program.workouts[currentDay];
+            
+            if (!workout) return;
+            
+            const today = new Date();
+            const todayStr = today.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Save workout to localStorage
+            let workouts = JSON.parse(localStorage.getItem('liftit_workouts') || '[]');
+            
+            const workoutData = {
+                id: Date.now(),
+                date: today.toISOString(),
+                program: program.title,
+                workout: workout.title,
+                duration: workout.duration,
+                calories: workout.calories,
+                completedAt: new Date().toISOString()
+            };
+            
+            workouts.push(workoutData);
+            localStorage.setItem('liftit_workouts', JSON.stringify(workouts));
+            
+            // Mark as completed today
+            localStorage.setItem('liftit_today_completed', 'true');
+            localStorage.setItem('liftit_last_completion', today.toDateString());
+            todayCompleted = true;
+            
+            // Update UI
+            document.getElementById('workoutStatus').textContent = 'Selesai hari ini';
+            document.getElementById('workoutIndicator').style.backgroundColor = '#10b981';
+            
+            // Show success notification
+            showNotification(`🎉 Latihan "${workout.title}" selesai!`, 'success');
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Log exercise set
+        function logExerciseSet(exerciseName) {
+            // Mark the exercise as completed
+            const exerciseSet = event.target.closest('.exercise-set');
+            if (exerciseSet) {
+                const progressCircle = exerciseSet.querySelector('.progress-circle');
+                progressCircle.classList.add('completed');
+                progressCircle.innerHTML = '<i class="fas fa-check text-green-400"></i>';
+                
+                showNotification(`✅ ${exerciseName} selesai!`, 'info');
+            }
+        }
+
+        // Check today's workout status
+        function checkTodayWorkout() {
+            const todayCompleted = localStorage.getItem('liftit_today_completed');
+            const lastCompletion = localStorage.getItem('liftit_last_completion');
+            const today = new Date().toDateString();
+            
+            if (todayCompleted === 'true' && lastCompletion === today) {
+                document.getElementById('workoutStatus').textContent = 'Selesai hari ini';
+                document.getElementById('workoutIndicator').style.backgroundColor = '#10b981';
+            } else {
+                // Reset if it's a new day
+                localStorage.removeItem('liftit_today_completed');
+                document.getElementById('workoutStatus').textContent = 'Belum dimulai';
+                document.getElementById('workoutIndicator').style.backgroundColor = '#dc2626';
+            }
+        }
+
+        // Update progress stats
+        function updateProgress() {
+            try {
+                let workouts = JSON.parse(localStorage.getItem('liftit_workouts') || '[]');
+                const totalWorkouts = workouts.length;
+                
+                // Calculate total minutes
+                const totalMinutes = workouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+                
+                // Calculate streak
+                let streak = 0;
+                const today = new Date();
+                let checkDate = new Date(today);
+                
+                // Sort workouts by date
+                workouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Check consecutive days
+                for (let i = 0; i < 7; i++) {
+                    const dateStr = checkDate.toDateString();
+                    const hasWorkout = workouts.some(w => {
+                        const workoutDate = new Date(w.date).toDateString();
+                        return workoutDate === dateStr;
+                    });
+                    
+                    if (hasWorkout) {
+                        streak++;
+                        checkDate.setDate(checkDate.getDate() - 1);
+                    } else {
+                        break;
+                    }
+                }
+                
+                // Update UI
+                document.getElementById('totalWorkouts').textContent = totalWorkouts;
+                document.getElementById('currentStreak').textContent = streak;
+                document.getElementById('totalMinutes').textContent = totalMinutes;
+                
+                document.getElementById('totalSelesai').textContent = totalWorkouts;
+                document.getElementById('streakHari').textContent = streak;
+                document.getElementById('totalWaktu').textContent = totalMinutes;
+                
+                // Update today's progress
+                const todayStr = today.toDateString();
+                const todayWorkout = workouts.find(w => {
+                    const workoutDate = new Date(w.date).toDateString();
+                    return workoutDate === todayStr;
+                });
+                
+                if (todayWorkout) {
+                    document.getElementById('todayStatus').textContent = 'Selesai';
+                    document.getElementById('todayStatus').className = 'px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm';
+                    document.getElementById('todayDuration').textContent = todayWorkout.duration + ' menit';
+                    document.getElementById('todayCalories').textContent = todayWorkout.calories + ' kcal';
+                } else {
+                    document.getElementById('todayStatus').textContent = 'Belum latihan';
+                    document.getElementById('todayStatus').className = 'px-3 py-1 bg-gray-700 rounded-full text-sm';
+                    document.getElementById('todayDuration').textContent = '0 menit';
+                    document.getElementById('todayCalories').textContent = '0 kcal';
+                }
+                
+                // Update recent workouts
+                updateRecentWorkouts(workouts.slice(0, 3));
+                
+            } catch (error) {
+                console.error('Error updating progress:', error);
+            }
+        }
+
+        // Update recent workouts
+        function updateRecentWorkouts(recentWorkouts) {
+            const container = document.getElementById('recentWorkouts');
+            
+            if (recentWorkouts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-4 text-gray-500">
+                        <i class="fas fa-dumbbell text-2xl mb-2"></i>
+                        <p>Belum ada catatan latihan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = recentWorkouts.map(workout => {
+                const date = new Date(workout.date);
+                const formattedDate = date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short'
+                });
+                
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-merah/20 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-dumbbell text-merah"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium">${workout.workout}</div>
+                                <div class="text-sm text-gray-400">${formattedDate}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-medium">${workout.duration} menit</div>
+                            <div class="text-xs text-gray-400">${workout.calories} kcal</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load exercise library
+        function loadExerciseLibrary() {
+            const container = document.getElementById('exerciseLibrary');
+            const searchInput = document.getElementById('exerciseSearch');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            
+            let filteredExercises = exercises;
+            if (searchTerm) {
+                filteredExercises = exercises.filter(ex => 
+                    ex.name.toLowerCase().includes(searchTerm) ||
+                    ex.muscle.toLowerCase().includes(searchTerm) ||
+                    ex.equipment.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filteredExercises.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center p-8 text-gray-400">
+                        <i class="fas fa-search text-3xl mb-4"></i>
+                        <p>Tidak ada gerakan yang ditemukan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredExercises.map(exercise => `
+                <div class="kartu p-6 hover:border-merah transition-all cursor-pointer" onclick="showExerciseDetail('${exercise.name}')">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h4 class="font-bold text-lg mb-1">${exercise.name}</h4>
+                            <p class="text-sm text-gray-400">${exercise.muscle}</p>
+                        </div>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-xs">${exercise.equipment}</span>
+                    </div>
+                    
+                    <div class="flex items-center text-sm text-gray-300">
+                        <i class="fas fa-play-circle text-merah mr-2"></i>
+                        <span>Video panduan tersedia</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show exercise detail
+        function showExerciseDetail(exerciseName) {
+            const exercise = exercises.find(ex => ex.name === exerciseName);
+            if (!exercise) return;
+            
+            document.getElementById('exerciseTitle').textContent = exercise.name;
+            document.getElementById('exerciseContent').innerHTML = `
+                <div class="mb-6">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe src="${exercise.video.replace('watch?v=', 'embed/')}" 
+                                class="w-full h-48 md:h-64 rounded-lg" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="font-bold mb-2 text-gray-300">Muscle Group</h4>
+                        <p class="text-lg font-medium">${exercise.muscle}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2 text-gray-300">Equipment</h4>
+                        <p class="text-lg font-medium">${exercise.equipment}</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold mb-3 text-gray-300">Tips Eksekusi</h4>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-dumbbell text-merah mr-2"></i> Pilih beban yang sesuai dengan kemampuan</li>
+                        <li><i class="fas fa-clock text-merah mr-2"></i> Kontrol gerakan selama 2-3 detik</li>
+                        <li><i class="fas fa-user text-merah mr-2"></i> Jaga postur tubuh yang benar</li>
+                        <li><i class="fas fa-heart text-merah mr-2"></i> Bernapas dengan teratur</li>
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('exerciseModal').classList.remove('hidden');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationToast');
+            
+            const colors = {
+                success: 'bg-green-900/90 border border-green-700',
+                info: 'bg-blue-900/90 border border-blue-700',
+                warning: 'bg-yellow-900/90 border border-yellow-700',
+                error: 'bg-red-900/90 border border-red-700'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                info: 'fa-info-circle',
+                warning: 'fa-exclamation-triangle',
+                error: 'fa-exclamation-circle'
+            };
+            
+            container.className = `fixed top-4 right-4 z-50 max-w-sm notification ${colors[type]}`;
+            container.innerHTML = `
+                <div class="flex items-center p-4">
+                    <i class="fas ${icons[type]} text-${type === 'success' ? 'green' : type === 'info' ? 'blue' : type === 'warning' ? 'yellow' : 'red'}-400 mr-3 text-xl"></i>
+                    <div class="flex-1">
+                        <div class="font-medium">${message}</div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.classList.add('hidden')" class="ml-4 text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            container.classList.remove('hidden');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                container.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            const exerciseModal = document.getElementById('exerciseModal');
+            
+            if (exerciseModal && event.target === exerciseModal) {
+                closeExerciseModal();
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeExerciseModal();
+            }
+        });
+    </script>
+</body>
+</html>
