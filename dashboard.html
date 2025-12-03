@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Saya - LIFTIT</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        body { 
+            background: #0a0a0a; 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .kartu {
+            background: #171717;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .kartu:hover {
+            border-color: #dc2626;
+        }
+        
+        .tombol-merah {
+            background: #dc2626;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tombol-merah:hover {
+            background: #991b1b;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #991b1b);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-left: 4px solid #dc2626;
+        }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                        <i class="fas fa-dumbbell text-white"></i>
+                    </div>
+                    <span class="ml-3 text-xl font-bold">
+                        <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                    </span>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <span id="userGreeting" class="text-gray-300">Selamat datang!</span>
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-merah rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-abu-card border border-abu-border rounded-lg shadow-lg py-2">
+                            <a href="profil.html" class="block px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white">
+                                <i class="fas fa-user mr-2"></i> Profil Saya
+                            </a>
+                            <a href="index.html" class="block px-4 py-2 text-gray-300 hover:bg-gray-800 hover:text-white">
+                                <i class="fas fa-home mr-2"></i> Beranda
+                            </a>
+                            <hr class="border-gray-700 my-2">
+                            <button onclick="logout()" class="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto">
+            <!-- Header Dashboard -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold mb-2">Dashboard Progress</h1>
+                <p id="dashboardDate" class="text-gray-400">Memuat data...</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-12">
+                <i class="fas fa-spinner fa-spin text-3xl text-merah mb-4"></i>
+                <p class="text-gray-400">Memuat data progress Anda...</p>
+            </div>
+
+            <!-- Dashboard Content (akan diisi oleh JavaScript) -->
+            <div id="dashboardContent" class="hidden">
+                <!-- Ringkasan Stats -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="kartu">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">Berat Badan</p>
+                                <p class="text-2xl font-bold"><span id="currentWeight">0</span> kg</p>
+                            </div>
+                            <div class="text-merah">
+                                <i class="fas fa-weight text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="weightProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Target: <span id="targetWeight">0</span> kg</p>
+                    </div>
+                    
+                    <div class="kartu">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">Protein Hari Ini</p>
+                                <p class="text-2xl font-bold"><span id="todayProtein">0</span> g</p>
+                            </div>
+                            <div class="text-blue-400">
+                                <i class="fas fa-utensils text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="proteinProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Target: <span id="targetProtein">0</span> g/hari</p>
+                    </div>
+                    
+                    <div class="kartu">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">Streak Latihan</p>
+                                <p class="text-2xl font-bold"><span id="workoutStreak">0</span> hari</p>
+                            </div>
+                            <div class="text-yellow-400">
+                                <i class="fas fa-fire text-2xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-400" id="streakStatus">Mulai streak Anda!</p>
+                    </div>
+                    
+                    <div class="kartu">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">Progress Bulan Ini</p>
+                                <p class="text-2xl font-bold"><span id="monthProgress">0</span>%</p>
+                            </div>
+                            <div class="text-purple-400">
+                                <i class="fas fa-chart-line text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="overallProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Menuju target</p>
+                    </div>
+                </div>
+
+                <!-- Grafik Progress -->
+                <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Grafik Berat Badan -->
+                    <div class="kartu">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold">Perkembangan Berat Badan</h3>
+                            <select id="weightChartRange" class="bg-gray-800 border border-gray-700 text-white rounded px-3 py-1">
+                                <option value="7">7 Hari</option>
+                                <option value="30" selected>30 Hari</option>
+                                <option value="90">90 Hari</option>
+                            </select>
+                        </div>
+                        <canvas id="weightChart" height="250"></canvas>
+                    </div>
+                    
+                    <!-- Grafik Protein Harian -->
+                    <div class="kartu">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold">Konsumsi Protein Harian</h3>
+                            <select id="proteinChartRange" class="bg-gray-800 border border-gray-700 text-white rounded px-3 py-1">
+                                <option value="7">7 Hari</option>
+                                <option value="30" selected>30 Hari</option>
+                            </select>
+                        </div>
+                        <canvas id="proteinChart" height="250"></canvas>
+                    </div>
+                </div>
+
+                <!-- Input Data Cepat -->
+                <div class="kartu mb-8">
+                    <h3 class="text-xl font-bold mb-6">Catat Progress Hari Ini</h3>
+                    
+                    <div class="grid md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-gray-300 text-sm mb-2">Berat Badan (kg)</label>
+                            <input type="number" id="inputWeight" step="0.1" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="72.5">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-300 text-sm mb-2">Lengan (cm)</label>
+                            <input type="number" id="inputArm" step="0.1" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="38.5">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-300 text-sm mb-2">Dada (cm)</label>
+                            <input type="number" id="inputChest" step="0.1" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="105">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-300 text-sm mb-2">Paha (cm)</label>
+                            <input type="number" id="inputThigh" step="0.1" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white" placeholder="62">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <button onclick="quickAdd('workout')" class="tombol-merah mr-3">
+                                <i class="fas fa-dumbbell mr-2"></i> Tambah Latihan
+                            </button>
+                            <button onclick="quickAdd('nutrition')" class="bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-700">
+                                <i class="fas fa-utensils mr-2"></i> Catat Makanan
+                            </button>
+                        </div>
+                        <button onclick="saveTodayProgress()" class="tombol-merah px-6 py-3">
+                            <i class="fas fa-save mr-2"></i> Simpan Semua
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Riwayat Terbaru -->
+                <div class="kartu">
+                    <h3 class="text-xl font-bold mb-6">Aktivitas Terbaru</h3>
+                    
+                    <div class="space-y-4" id="recentActivity">
+                        <!-- Akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Not Logged In State -->
+            <div id="notLoggedIn" class="hidden text-center py-12">
+                <div class="max-w-md mx-auto">
+                    <i class="fas fa-lock text-5xl text-merah mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Akses Terbatas</h3>
+                    <p class="text-gray-400 mb-8">Silakan login untuk melihat dashboard progress Anda</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="masuk.html" class="tombol-merah px-8 py-3">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Login
+                        </a>
+                        <a href="daftar.html" class="bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-user-plus mr-2"></i> Daftar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/auth.js"></script>
+    <script src="js/user-manager.js"></script>
+    <script src="js/charts.js"></script>
+    
+    <script>
+        // Check login status
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            setupUserMenu();
+        });
+
+        function checkLoginStatus() {
+            const loading = document.getElementById('loadingState');
+            const dashboard = document.getElementById('dashboardContent');
+            const notLoggedIn = document.getElementById('notLoggedIn');
+
+            if (!auth.isLoggedIn()) {
+                loading.classList.add('hidden');
+                notLoggedIn.classList.remove('hidden');
+                return;
+            }
+
+            // User is logged in
+            loading.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+            loadUserDashboard();
+        }
+
+        function loadUserDashboard() {
+            const user = auth.getCurrentUser();
+            const summary = userManager.getDashboardSummary(user.id);
+
+            // Update UI dengan data user
+            document.getElementById('userGreeting').textContent = `Halo, ${user.nama}!`;
+            document.getElementById('dashboardDate').textContent = 
+                `Terakhir update: ${new Date().toLocaleDateString('id-ID', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                })}`;
+
+            // Update stats
+            if (summary) {
+                // Update stat cards
+                document.getElementById('currentWeight').textContent = summary.stats.beratTerakhir;
+                document.getElementById('targetWeight').textContent = user.data.goals.targetBerat;
+                
+                const weightProgress = Math.min(
+                    (summary.stats.beratTerakhir / user.data.goals.targetBerat) * 100, 
+                    100
+                );
+                document.getElementById('weightProgress').style.width = `${weightProgress}%`;
+
+                document.getElementById('todayProtein').textContent = 
+                    summary.hariIni.nutrisi ? summary.hariIni.nutrisi.protein || 0 : 0;
+                document.getElementById('targetProtein').textContent = user.data.goals.targetProtein;
+                
+                const proteinProgress = Math.min(
+                    ((summary.hariIni.nutrisi ? summary.hariIni.nutrisi.protein || 0 : 0) / user.data.goals.targetProtein) * 100,
+                    100
+                );
+                document.getElementById('proteinProgress').style.width = `${proteinProgress}%`;
+
+                document.getElementById('workoutStreak').textContent = summary.stats.streakHari;
+                document.getElementById('streakStatus').textContent = 
+                    summary.stats.streakHari > 0 ? 
+                    `Konsisten ${summary.stats.streakHari} hari!` : 
+                    'Mulai streak Anda!';
+
+                document.getElementById('monthProgress').textContent = summary.stats.targetProgress;
+                document.getElementById('overallProgress').style.width = `${summary.stats.targetProgress}%`;
+
+                // Load charts
+                loadCharts(user.id);
+
+                // Load recent activity
+                loadRecentActivity(user.id);
+            }
+        }
+
+        function loadCharts(userId) {
+            // Weight chart
+            const weightData = userManager.getProgressDataForChart(userId, 'berat', 30);
+            if (weightData && weightData.data.length > 0) {
+                createWeightChart(weightData.labels, weightData.data);
+            }
+
+            // Protein chart
+            const proteinData = userManager.getProgressDataForChart(userId, 'protein', 30);
+            if (proteinData && proteinData.data.length > 0) {
+                createProteinChart(proteinData.labels, proteinData.data);
+            }
+        }
+
+        function loadRecentActivity(userId) {
+            const user = auth.getUserById(userId);
+            if (!user) return;
+
+            const recentActivity = document.getElementById('recentActivity');
+            const activities = [];
+
+            // Get recent weight entries
+            user.data.progress.berat.slice(-3).reverse().forEach(entry => {
+                activities.push({
+                    type: 'weight',
+                    date: new Date(entry.tanggal),
+                    value: entry.nilai,
+                    note: entry.catatan
+                });
+            });
+
+            // Get recent workouts
+            user.data.progress.latihan.slice(-3).reverse().forEach(entry => {
+                activities.push({
+                    type: 'workout',
+                    date: new Date(entry.tanggal),
+                    value: entry.jenis,
+                    duration: entry.durasi
+                });
+            });
+
+            // Get recent nutrition entries
+            user.data.progress.nutrisi.slice(-3).reverse().forEach(entry => {
+                activities.push({
+                    type: 'nutrition',
+                    date: new Date(entry.tanggal),
+                    protein: entry.protein,
+                    calories: entry.kalori
+                });
+            });
+
+            // Sort by date
+            activities.sort((a, b) => b.date - a.date);
+
+            // Display activities
+            recentActivity.innerHTML = activities.slice(0, 5).map(activity => {
+                const timeAgo = getTimeAgo(activity.date);
+                
+                switch(activity.type) {
+                    case 'weight':
+                        return `
+                            <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-red-900/30 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-weight text-merah"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Berat: ${activity.value} kg</p>
+                                        <p class="text-sm text-gray-400">${activity.note || 'Tidak ada catatan'}</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-400">${timeAgo}</span>
+                            </div>
+                        `;
+                        
+                    case 'workout':
+                        return `
+                            <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-blue-900/30 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-dumbbell text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">${activity.value}</p>
+                                        <p class="text-sm text-gray-400">${activity.duration} menit</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-400">${timeAgo}</span>
+                            </div>
+                        `;
+                        
+                    case 'nutrition':
+                        return `
+                            <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-green-900/30 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-utensils text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Konsumsi: ${activity.protein}g protein</p>
+                                        <p class="text-sm text-gray-400">${activity.calories} kalori</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-400">${timeAgo}</span>
+                            </div>
+                        `;
+                }
+            }).join('');
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            if (diffMins < 60) {
+                return `${diffMins} menit lalu`;
+            } else if (diffHours < 24) {
+                return `${diffHours} jam lalu`;
+            } else if (diffDays === 1) {
+                return 'Kemarin';
+            } else {
+                return `${diffDays} hari lalu`;
+            }
+        }
+
+        function saveTodayProgress() {
+            const user = auth.getCurrentUser();
+            if (!user) return;
+
+            const weight = document.getElementById('inputWeight').value;
+            const arm = document.getElementById('inputArm').value;
+            const chest = document.getElementById('inputChest').value;
+            const thigh = document.getElementById('inputThigh').value;
+
+            let saved = false;
+
+            if (weight) {
+                userManager.addWeightMeasurement(user.id, parseFloat(weight), 'Input manual');
+                saved = true;
+            }
+
+            if (arm || chest || thigh) {
+                userManager.addBodyMeasurements(user.id, {
+                    lengan: arm ? parseFloat(arm) : null,
+                    dada: chest ? parseFloat(chest) : null,
+                    paha: thigh ? parseFloat(thigh) : null
+                });
+                saved = true;
+            }
+
+            if (saved) {
+                alert('Progress berhasil disimpan!');
+                loadUserDashboard(); // Refresh data
+                
+                // Clear inputs
+                document.getElementById('inputWeight').value = '';
+                document.getElementById('inputArm').value = '';
+                document.getElementById('inputChest').value = '';
+                document.getElementById('inputThigh').value = '';
+            } else {
+                alert('Tidak ada data yang dimasukkan.');
+            }
+        }
+
+        function quickAdd(type) {
+            if (type === 'workout') {
+                const workoutType = prompt('Jenis latihan (contoh: Push Day, Cardio, dll):');
+                if (workoutType) {
+                    const duration = prompt('Durasi (menit):');
+                    if (duration) {
+                        userManager.addWorkoutSession(auth.currentUser.id, {
+                            jenis: workoutType,
+                            durasi: parseInt(duration),
+                            kalori: Math.round(parseInt(duration) * 8) // Estimasi
+                        });
+                        alert('Latihan berhasil dicatat!');
+                        loadUserDashboard();
+                    }
+                }
+            } else if (type === 'nutrition') {
+                const protein = prompt('Protein (gram):');
+                if (protein) {
+                    const calories = prompt('Total kalori:');
+                    userManager.addNutritionData(auth.currentUser.id, {
+                        protein: parseFloat(protein),
+                        kalori: calories ? parseFloat(calories) : parseFloat(protein) * 4 + 500 // Estimasi
+                    });
+                    alert('Nutrisi berhasil dicatat!');
+                    loadUserDashboard();
+                }
+            }
+        }
+
+        function setupUserMenu() {
+            const menuButton = document.getElementById('userMenuButton');
+            const dropdown = document.getElementById('userDropdown');
+
+            menuButton.addEventListener('click', function() {
+                dropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!menuButton.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        function logout() {
+            auth.logout();
+            window.location.href = 'masuk.html';
+        }
+
+        // Chart creation functions (simplified)
+        let weightChart, proteinChart;
+
+        function createWeightChart(labels, data) {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            
+            if (weightChart) {
+                weightChart.destroy();
+            }
+
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Berat Badan (kg)',
+                        data: data,
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#d1d5db' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: '#333' },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        x: {
+                            grid: { color: '#333' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createProteinChart(labels, data) {
+            const ctx = document.getElementById('proteinChart').getContext('2d');
+            
+            if (proteinChart) {
+                proteinChart.destroy();
+            }
+
+            proteinChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Protein (gram)',
+                        data: data,
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#d1d5db' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#333' },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        x: {
+                            grid: { color: '#333' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

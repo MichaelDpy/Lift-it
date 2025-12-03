@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Makro - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .kartu { background: #171717; border: 1px solid #333; border-radius: 12px; }
+        .input { background: #262626; border: 1px solid #404040; color: white; padding: 12px 16px; border-radius: 8px; }
+        .input:focus { outline: none; border-color: #dc2626; }
+        .tombol-merah { background: #dc2626; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; }
+        .tombol-merah:hover { background: #991b1b; }
+        .tab-kalkulator { padding: 12px 24px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-kalkulator.active { border-bottom-color: #dc2626; color: #dc2626; }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Menu -->
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white">
+                        <i class=""></i> Beranda
+                    </a>
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-chart-line mr-2"></i> Dashboard
+                    </a>
+                    <a href="kalkulator.html" class="text-merah font-semibold">
+                        <i class="fas fa-calculator mr-2"></i> Kalkulator
+                    </a>
+                    <a href="resep.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-utensils mr-2"></i> Resep
+                    </a>
+                    <a href="artikel.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-book-open mr-2"></i> Artikel
+                    </a>
+                    <a href="latihan.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-dumbbell mr-2"></i> Latihan
+                    </a>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold mb-4">
+                    <i class="fas fa-calculator text-merah mr-3"></i>
+                    Kalkulator Nutrisi
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    Hitung kebutuhan kalori, protein, karbohidrat, dan lemak untuk tujuan fitness Anda
+                </p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex justify-center border-b border-abu-border mb-8">
+                <div class="tab-kalkulator active" onclick="switchMode('manual')">
+                    <i class="fas fa-calculator mr-2"></i> Hitung Manual
+                </div>
+                <div class="tab-kalkulator" onclick="switchMode('profile')">
+                    <i class="fas fa-user mr-2"></i> Dari Profil Saya
+                </div>
+                <div class="tab-kalkulator" onclick="switchMode('advanced')">
+                    <i class="fas fa-chart-bar mr-2"></i> Mode Lanjutan
+                </div>
+            </div>
+
+            <!-- Manual Calculator -->
+            <div id="manualMode" class="space-y-8">
+                <!-- Input Form -->
+                <div class="kartu p-8">
+                    <h2 class="text-2xl font-bold mb-6">Masukkan Data Anda</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Left Column -->
+                        <div>
+                            <!-- Personal Data -->
+                            <div class="mb-8">
+                                <h3 class="text-lg font-bold mb-4 text-gray-300">Data Pribadi</h3>
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-300 mb-2">Jenis Kelamin</label>
+                                            <select id="gender" class="input w-full">
+                                                <option value="pria">Pria</option>
+                                                <option value="wanita">Wanita</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-300 mb-2">Usia</label>
+                                            <input type="number" id="age" class="input w-full" placeholder="25" min="15" max="80">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-300 mb-2">Berat (kg)</label>
+                                            <input type="number" id="weight" class="input w-full" placeholder="70" step="0.1">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-300 mb-2">Tinggi (cm)</label>
+                                            <input type="number" id="height" class="input w-full" placeholder="175">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity Level -->
+                            <div class="mb-8">
+                                <h3 class="text-lg font-bold mb-4 text-gray-300">Level Aktivitas</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="activity" value="1.2" class="mr-3 text-merah">
+                                        <div>
+                                            <p class="font-medium">Sedentary</p>
+                                            <p class="text-sm text-gray-400">Minim gerak, kerja di depan komputer</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="activity" value="1.375" class="mr-3 text-merah" checked>
+                                        <div>
+                                            <p class="font-medium">Ringan</p>
+                                            <p class="text-sm text-gray-400">Olahraga 1-3x per minggu</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="activity" value="1.55" class="mr-3 text-merah">
+                                        <div>
+                                            <p class="font-medium">Moderat</p>
+                                            <p class="text-sm text-gray-400">Olahraga 3-5x per minggu</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="activity" value="1.725" class="mr-3 text-merah">
+                                        <div>
+                                            <p class="font-medium">Aktif</p>
+                                            <p class="text-sm text-gray-400">Olahraga 6-7x per minggu</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div>
+                            <!-- Fitness Goal -->
+                            <div class="mb-8">
+                                <h3 class="text-lg font-bold mb-4 text-gray-300">Tujuan Fitness</h3>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="goal" value="bulking" class="hidden peer" checked>
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-dumbbell text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Bulking</span>
+                                            <p class="text-xs text-gray-400 mt-1">Naik massa otot</p>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="goal" value="cutting" class="hidden peer">
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-weight text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Cutting</span>
+                                            <p class="text-xs text-gray-400 mt-1">Turun lemak</p>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="goal" value="maintain" class="hidden peer">
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-balance-scale text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Maintain</span>
+                                            <p class="text-xs text-gray-400 mt-1">Pertahankan</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Protein Target -->
+                            <div class="mb-8">
+                                <h3 class="text-lg font-bold mb-4 text-gray-300">Target Protein</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="protein" value="1.2" class="mr-3 text-merah">
+                                        <div>
+                                            <p class="font-medium">Pemula (1.2g/kg)</p>
+                                            <p class="text-sm text-gray-400">Untuk yang baru mulai fitness</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="protein" value="1.6" class="mr-3 text-merah" checked>
+                                        <div>
+                                            <p class="font-medium">Standar (1.6g/kg)</p>
+                                            <p class="text-sm text-gray-400">Untuk fitness secara umum</p>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-merah">
+                                        <input type="radio" name="protein" value="2.0" class="mr-3 text-merah">
+                                        <div>
+                                            <p class="font-medium">Intensif (2.0g/kg)</p>
+                                            <p class="text-sm text-gray-400">Untuk bulking atau atlet</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Calculate Button -->
+                            <button onclick="calculateMacros()" class="tombol-merah w-full py-4 text-lg">
+                                <i class="fas fa-calculator mr-2"></i>
+                                Hitung Kebutuhan Saya
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" class="hidden">
+                    <!-- Macro Summary -->
+                    <div class="kartu p-8 mb-8">
+                        <h2 class="text-2xl font-bold mb-6">Hasil Perhitungan</h2>
+                        
+                        <div class="grid md:grid-cols-4 gap-6 mb-8">
+                            <div class="text-center p-6 bg-gray-900 rounded-xl">
+                                <div class="text-3xl font-bold text-merah mb-2" id="totalCalories">0</div>
+                                <div class="text-gray-400">Kalori/hari</div>
+                            </div>
+                            <div class="text-center p-6 bg-gray-900 rounded-xl">
+                                <div class="text-3xl font-bold text-blue-400 mb-2" id="proteinResult">0g</div>
+                                <div class="text-gray-400">Protein</div>
+                            </div>
+                            <div class="text-center p-6 bg-gray-900 rounded-xl">
+                                <div class="text-3xl font-bold text-yellow-400 mb-2" id="carbsResult">0g</div>
+                                <div class="text-gray-400">Karbohidrat</div>
+                            </div>
+                            <div class="text-center p-6 bg-gray-900 rounded-xl">
+                                <div class="text-3xl font-bold text-green-400 mb-2" id="fatResult">0g</div>
+                                <div class="text-gray-400">Lemak</div>
+                            </div>
+                        </div>
+
+                        <!-- Chart -->
+                        <div class="mb-8">
+                            <canvas id="macroChart" height="100"></canvas>
+                        </div>
+
+                        <!-- Meal Plan Example -->
+                        <div>
+                            <h3 class="text-lg font-bold mb-4 text-gray-300">Contoh Pembagian Makan</h3>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="p-4 border border-gray-700 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
+                                            <i class="fas fa-sun text-blue-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Sarapan</p>
+                                            <p class="text-sm text-gray-400">30% dari total</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-300" id="breakfastExample">-</div>
+                                </div>
+                                <div class="p-4 border border-gray-700 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 bg-yellow-900/30 rounded-lg flex items-center justify-center mr-3">
+                                            <i class="fas fa-utensils text-yellow-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Makan Siang</p>
+                                            <p class="text-sm text-gray-400">35% dari total</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-300" id="lunchExample">-</div>
+                                </div>
+                                <div class="p-4 border border-gray-700 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 bg-purple-900/30 rounded-lg flex items-center justify-center mr-3">
+                                            <i class="fas fa-moon text-purple-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Makan Malam</p>
+                                            <p class="text-sm text-gray-400">25% dari total</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-300" id="dinnerExample">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save & Action Buttons -->
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <button onclick="saveToProfile()" class="tombol-merah px-6 py-3 mr-4">
+                                <i class="fas fa-save mr-2"></i> Simpan ke Profil
+                            </button>
+                            <button onclick="printResults()" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800">
+                                <i class="fas fa-print mr-2"></i> Cetak Hasil
+                            </button>
+                        </div>
+                        <button onclick="resetCalculator()" class="px-6 py-3 text-gray-300 hover:text-white">
+                            <i class="fas fa-redo mr-2"></i> Hitung Ulang
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Mode -->
+            <div id="profileMode" class="hidden space-y-8">
+                <div class="kartu p-8">
+                    <h2 class="text-2xl font-bold mb-6">Hitung dari Profil Anda</h2>
+                    
+                    <div id="profileData" class="mb-8">
+                        <!-- Data profil akan dimuat di sini -->
+                    </div>
+                    
+                    <button onclick="calculateFromProfile()" class="tombol-merah px-6 py-3">
+                        <i class="fas fa-calculator mr-2"></i> Hitung dari Profil Saya
+                    </button>
+                </div>
+            </div>
+
+            <!-- Advanced Mode -->
+            <div id="advancedMode" class="hidden space-y-8">
+                <div class="kartu p-8">
+                    <h2 class="text-2xl font-bold mb-6">Mode Lanjutan</h2>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-300 mb-2">Metode Perhitungan</label>
+                        <select id="method" class="input w-full">
+                            <option value="harris">Harris-Benedict (Standar)</option>
+                            <option value="mifflin">Mifflin-St Jeor (Akurat)</option>
+                            <option value="katch">Katch-McArdle (Lean Mass)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-300 mb-2">Body Fat Percentage (%)</label>
+                        <input type="number" id="bodyfat" class="input w-full" placeholder="15" min="5" max="50" step="0.1">
+                        <p class="text-xs text-gray-400 mt-1">Opsional untuk perhitungan lebih akurat</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-300 mb-2">Carb Cycling</label>
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="carbCycle" value="none" class="mr-2 text-merah" checked>
+                                <span class="text-gray-300">Tidak ada</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="carbCycle" value="low" class="mr-2 text-merah">
+                                <span class="text-gray-300">Rendah Karbo</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="carbCycle" value="high" class="mr-2 text-merah">
+                                <span class="text-gray-300">Tinggi Karbo</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button onclick="calculateAdvanced()" class="tombol-merah px-6 py-3">
+                        <i class="fas fa-chart-bar mr-2"></i> Hitung Mode Lanjutan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="kartu p-8 mt-8">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-lightbulb text-merah mr-3"></i>
+                    Tips & Informasi
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-4 border border-gray-700 rounded-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-red-900/30 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-weight text-merah"></i>
+                            </div>
+                            <h3 class="font-bold">Timbang Makanan</h3>
+                        </div>
+                        <p class="text-sm text-gray-300">Gunakan food scale untuk akurasi pengukuran porsi makanan.</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-700 rounded-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-clock text-blue-400"></i>
+                            </div>
+                            <h3 class="font-bold">Konsisten</h3>
+                        </div>
+                        <p class="text-sm text-gray-300">Ikuti pola makan secara konsisten minimal 4 minggu untuk melihat hasil.</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-700 rounded-lg">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-green-900/30 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-tint text-green-400"></i>
+                            </div>
+                            <h3 class="font-bold">Hidrasi</h3>
+                        </div>
+                        <p class="text-sm text-gray-300">Minum 3-4 liter air per hari untuk metabolisme optimal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+    <script>
+        let macroChart = null;
+        let currentMode = 'manual';
+        
+        // Switch calculator mode
+        function switchMode(mode) {
+            // Update tabs
+            document.querySelectorAll('.tab-kalkulator').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all modes
+            document.getElementById('manualMode').classList.add('hidden');
+            document.getElementById('profileMode').classList.add('hidden');
+            document.getElementById('advancedMode').classList.add('hidden');
+            
+            // Show selected mode
+            document.getElementById(`${mode}Mode`).classList.remove('hidden');
+            currentMode = mode;
+            
+            // Load profile data if profile mode
+            if (mode === 'profile') {
+                loadProfileData();
+            }
+        }
+        
+        // Load profile data
+        function loadProfileData() {
+            const user = auth.getCurrentUser();
+            const profileDiv = document.getElementById('profileData');
+            
+            if (!user) {
+                profileDiv.innerHTML = `
+                    <div class="p-6 bg-gray-800/50 rounded-lg text-center">
+                        <i class="fas fa-user-slash text-3xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400 mb-4">Silakan login untuk menggunakan data profil</p>
+                        <a href="masuk.html" class="tombol-merah px-6 py-3 inline-block">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Login
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            profileDiv.innerHTML = `
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="font-bold mb-3 text-gray-300">Data Profil Anda</h3>
+                        <div class="space-y-2">
+                            <p><span class="text-gray-400">Nama:</span> <span class="font-medium">${user.nama}</span></p>
+                            <p><span class="text-gray-400">Usia:</span> <span class="font-medium">${user.data.profil.usia} tahun</span></p>
+                            <p><span class="text-gray-400">Berat:</span> <span class="font-medium">${user.data.profil.berat} kg</span></p>
+                            <p><span class="text-gray-400">Tinggi:</span> <span class="font-medium">${user.data.profil.tinggi} cm</span></p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-3 text-gray-300">Tujuan & Aktivitas</h3>
+                        <div class="space-y-2">
+                            <p><span class="text-gray-400">Tujuan:</span> <span class="font-medium">${user.data.profil.tujuan === 'bulking' ? 'Bulking' : user.data.profil.tujuan === 'cutting' ? 'Cutting' : 'Maintain'}</span></p>
+                            <p><span class="text-gray-400">Aktivitas:</span> <span class="font-medium">${getActivityName(user.data.profil.aktivitas)}</span></p>
+                            <p><span class="text-gray-400">Target Berat:</span> <span class="font-medium">${user.data.goals.targetBerat} kg</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-800/30 rounded-lg">
+                    <p class="text-sm text-gray-300">
+                        <i class="fas fa-info-circle text-merah mr-2"></i>
+                        Perhitungan akan menggunakan data dari profil Anda. Klik "Hitung dari Profil Saya" untuk melanjutkan.
+                    </p>
+                </div>
+            `;
+        }
+        
+        function getActivityName(value) {
+            const activities = {
+                '1.2': 'Sedentary',
+                '1.375': 'Ringan',
+                '1.55': 'Moderat',
+                '1.725': 'Aktif',
+                '1.9': 'Sangat Aktif'
+            };
+            return activities[value] || 'Ringan';
+        }
+        
+        // Calculate macros
+        function calculateMacros() {
+            // Get values
+            const gender = document.getElementById('gender').value;
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.querySelector('input[name="activity"]:checked').value);
+            const goal = document.querySelector('input[name="goal"]:checked').value;
+            const proteinMultiplier = parseFloat(document.querySelector('input[name="protein"]:checked').value);
+            
+            // Validation
+            if (!age || !weight || !height) {
+                alert('Harap isi semua data yang diperlukan!');
+                return;
+            }
+            
+            // Calculate BMR
+            let bmr;
+            if (gender === 'pria') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+            
+            // Calculate TDEE
+            const tdee = bmr * activity;
+            
+            // Adjust for goal
+            let targetCalories;
+            switch(goal) {
+                case 'bulking':
+                    targetCalories = Math.round(tdee + 500);
+                    break;
+                case 'cutting':
+                    targetCalories = Math.round(tdee - 500);
+                    break;
+                default:
+                    targetCalories = Math.round(tdee);
+            }
+            
+            // Calculate macros
+            const proteinGrams = Math.round(weight * proteinMultiplier);
+            const proteinCalories = proteinGrams * 4;
+            
+            const fatCalories = targetCalories * 0.25;
+            const fatGrams = Math.round(fatCalories / 9);
+            
+            const carbCalories = targetCalories - proteinCalories - fatCalories;
+            const carbGrams = Math.round(carbCalories / 4);
+            
+            // Display results
+            displayResults(targetCalories, proteinGrams, carbGrams, fatGrams);
+            
+            // Show results section
+            document.getElementById('resultsSection').classList.remove('hidden');
+        }
+        
+        // Display results
+        function displayResults(calories, protein, carbs, fat) {
+            // Update numbers
+            document.getElementById('totalCalories').textContent = calories;
+            document.getElementById('proteinResult').textContent = `${protein}g`;
+            document.getElementById('carbsResult').textContent = `${carbs}g`;
+            document.getElementById('fatResult').textContent = `${fat}g`;
+            
+            // Update chart
+            updateChart(protein, carbs, fat);
+            
+            // Update meal examples
+            updateMealExamples(calories, protein, carbs, fat);
+        }
+        
+        // Update chart
+        function updateChart(protein, carbs, fat) {
+            const ctx = document.getElementById('macroChart').getContext('2d');
+            
+            if (macroChart) {
+                macroChart.destroy();
+            }
+            
+            macroChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Protein', 'Karbohidrat', 'Lemak'],
+                    datasets: [{
+                        data: [protein, carbs, fat],
+                        backgroundColor: [
+                            '#3b82f6', // blue
+                            '#f59e0b', // yellow
+                            '#10b981'  // green
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#d1d5db',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update meal examples
+        function updateMealExamples(calories, protein, carbs, fat) {
+            // Breakfast (30%)
+            const breakfastCal = Math.round(calories * 0.3);
+            const breakfastProtein = Math.round(protein * 0.3);
+            const breakfastCarbs = Math.round(carbs * 0.3);
+            const breakfastFat = Math.round(fat * 0.3);
+            
+            document.getElementById('breakfastExample').textContent = 
+                `${breakfastCal} kalori • ${breakfastProtein}g protein • ${breakfastCarbs}g karbo • ${breakfastFat}g lemak`;
+            
+            // Lunch (35%)
+            const lunchCal = Math.round(calories * 0.35);
+            const lunchProtein = Math.round(protein * 0.35);
+            const lunchCarbs = Math.round(carbs * 0.35);
+            const lunchFat = Math.round(fat * 0.35);
+            
+            document.getElementById('lunchExample').textContent = 
+                `${lunchCal} kalori • ${lunchProtein}g protein • ${lunchCarbs}g karbo • ${lunchFat}g lemak`;
+            
+            // Dinner (25%)
+            const dinnerCal = Math.round(calories * 0.25);
+            const dinnerProtein = Math.round(protein * 0.25);
+            const dinnerCarbs = Math.round(carbs * 0.25);
+            const dinnerFat = Math.round(fat * 0.25);
+            
+            document.getElementById('dinnerExample').textContent = 
+                `${dinnerCal} kalori • ${dinnerProtein}g protein • ${dinnerCarbs}g karbo • ${dinnerFat}g lemak`;
+        }
+        
+        // Calculate from profile
+        function calculateFromProfile() {
+            const user = auth.getCurrentUser();
+            
+            if (!user) {
+                alert('Silakan login terlebih dahulu!');
+                return;
+            }
+            
+            // Set form values from profile
+            document.getElementById('gender').value = user.data.profil.jenisKelamin;
+            document.getElementById('age').value = user.data.profil.usia;
+            document.getElementById('weight').value = user.data.profil.berat;
+            document.getElementById('height').value = user.data.profil.tinggi;
+            
+            // Set activity
+            document.querySelector(`input[name="activity"][value="${user.data.profil.aktivitas}"]`).checked = true;
+            
+            // Set goal
+            document.querySelector(`input[name="goal"][value="${user.data.profil.tujuan}"]`).checked = true;
+            
+            // Set protein based on goal
+            const proteinValue = user.data.profil.tujuan === 'bulking' ? '2.0' : '1.6';
+            document.querySelector(`input[name="protein"][value="${proteinValue}"]`).checked = true;
+            
+            // Switch to manual mode and calculate
+            switchMode('manual');
+            setTimeout(() => {
+                calculateMacros();
+            }, 100);
+        }
+        
+        // Calculate advanced
+        function calculateAdvanced() {
+            // For now, just show alert
+            alert('Mode lanjutan akan diimplementasikan dalam versi mendatang!');
+        }
+        
+        // Save to profile
+        function saveToProfile() {
+            const user = auth.getCurrentUser();
+            
+            if (!user) {
+                alert('Silakan login untuk menyimpan ke profil!');
+                window.location.href = 'masuk.html';
+                return;
+            }
+            
+            // Get current calculation results
+            const calories = parseInt(document.getElementById('totalCalories').textContent);
+            const protein = parseInt(document.getElementById('proteinResult').textContent);
+            const carbs = parseInt(document.getElementById('carbsResult').textContent);
+            const fat = parseInt(document.getElementById('fatResult').textContent);
+            
+            // Update user goals
+            const newGoals = {
+                ...user.data.goals,
+                targetCalories: calories,
+                targetProtein: protein,
+                targetCarbs: carbs,
+                targetFat: fat
+            };
+            
+            // Update user data
+            user.data.goals = newGoals;
+            auth.updateUserData(user.id, user);
+            
+            alert('Data berhasil disimpan ke profil!');
+        }
+        
+        // Print results
+        function printResults() {
+            window.print();
+        }
+        
+        // Reset calculator
+        function resetCalculator() {
+            // Reset form
+            document.getElementById('age').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            
+            // Hide results
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            // Reset chart
+            if (macroChart) {
+                macroChart.destroy();
+                macroChart = null;
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default values
+            document.getElementById('age').value = '25';
+            document.getElementById('weight').value = '70';
+            document.getElementById('height').value = '175';
+        });
+    </script>
+</body>
+</html>

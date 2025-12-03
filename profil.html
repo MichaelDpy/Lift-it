@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .kartu { background: #171717; border: 1px solid #333; border-radius: 12px; }
+        .input { background: #262626; border: 1px solid #404040; color: white; padding: 12px 16px; border-radius: 8px; }
+        .input:focus { outline: none; border-color: #dc2626; }
+        .tombol-merah { background: #dc2626; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; }
+        .tombol-merah:hover { background: #991b1b; }
+        .tab { padding: 12px 24px; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab.active { border-bottom-color: #dc2626; color: #dc2626; }
+    </style>
+</head>
+<body class="bg-hitam">
+    <!-- Navigation -->
+    <nav class="bg-hitam/95 border-b border-abu-border fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="dashboard.html" class="flex items-center">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-white"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Back Button -->
+                <a href="dashboard.html" class="text-gray-300 hover:text-white">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold mb-2">Profil & Pengaturan</h1>
+                <p class="text-gray-400">Kelola data pribadi, tujuan fitness, dan pengaturan akun</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-12">
+                <i class="fas fa-spinner fa-spin text-3xl text-merah mb-4"></i>
+                <p class="text-gray-400">Memuat data profil...</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div id="profileContent" class="hidden">
+                <!-- Tabs -->
+                <div class="flex border-b border-abu-border mb-8">
+                    <div class="tab active" onclick="switchTab('profil')">
+                        <i class="fas fa-user mr-2"></i> Data Profil
+                    </div>
+                    <div class="tab" onclick="switchTab('tujuan')">
+                        <i class="fas fa-bullseye mr-2"></i> Tujuan Fitness
+                    </div>
+                    <div class="tab" onclick="switchTab('pengaturan')">
+                        <i class="fas fa-cog mr-2"></i> Pengaturan
+                    </div>
+                    <div class="tab" onclick="switchTab('keamanan')">
+                        <i class="fas fa-shield-alt mr-2"></i> Keamanan
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="tabContent">
+                    <!-- Tab 1: Profil -->
+                    <div id="tabProfil" class="space-y-8">
+                        <!-- Informasi Dasar -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Informasi Dasar</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Nama Lengkap</label>
+                                    <input type="text" id="editNama" class="input w-full">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Email</label>
+                                    <input type="email" id="editEmail" class="input w-full" disabled>
+                                    <p class="text-xs text-gray-400 mt-1">Email tidak dapat diubah</p>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Tanggal Bergabung</label>
+                                    <input type="text" id="joinDate" class="input w-full bg-gray-800" disabled>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Member ID</label>
+                                    <input type="text" id="memberId" class="input w-full bg-gray-800" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Fisik -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Data Fisik</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Jenis Kelamin</label>
+                                    <select id="editJenisKelamin" class="input w-full">
+                                        <option value="pria">Pria</option>
+                                        <option value="wanita">Wanita</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Usia</label>
+                                    <input type="number" id="editUsia" class="input w-full" min="15" max="80">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Berat Badan (kg)</label>
+                                    <input type="number" id="editBerat" class="input w-full" step="0.1">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Tinggi Badan (cm)</label>
+                                    <input type="number" id="editTinggi" class="input w-full">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Level Aktivitas</label>
+                                    <select id="editAktivitas" class="input w-full">
+                                        <option value="1.2">Sedentary (Minim gerak)</option>
+                                        <option value="1.375">Ringan (Olahraga 1-3x/minggu)</option>
+                                        <option value="1.55">Moderat (Olahraga 3-5x/minggu)</option>
+                                        <option value="1.725">Aktif (Olahraga 6-7x/minggu)</option>
+                                        <option value="1.9">Sangat Aktif (Atlet)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="flex justify-end">
+                            <button onclick="saveProfile()" class="tombol-merah px-8 py-3">
+                                <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Tujuan Fitness -->
+                    <div id="tabTujuan" class="hidden space-y-8">
+                        <!-- Tujuan Utama -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Tujuan Fitness</h3>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-300 mb-2">Tujuan Utama</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="editTujuan" value="bulking" class="hidden peer">
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-dumbbell text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Bulking</span>
+                                            <p class="text-xs text-gray-400 mt-1">Naik massa otot</p>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="editTujuan" value="cutting" class="hidden peer">
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-weight text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Cutting</span>
+                                            <p class="text-xs text-gray-400 mt-1">Turun lemak</p>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="editTujuan" value="maintain" class="hidden peer">
+                                        <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                            <i class="fas fa-balance-scale text-xl mb-2 block text-merah"></i>
+                                            <span class="font-medium">Maintain</span>
+                                            <p class="text-xs text-gray-400 mt-1">Pertahankan</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Target Berat Badan (kg)</label>
+                                    <input type="number" id="editTargetBerat" class="input w-full" step="0.1">
+                                    <p class="text-xs text-gray-400 mt-1">Berat yang ingin dicapai</p>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Target Protein Harian (g)</label>
+                                    <input type="number" id="editTargetProtein" class="input w-full">
+                                    <p class="text-xs text-gray-400 mt-1">Rekomendasi: 1.6-2g per kg berat</p>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Sesi Latihan/Minggu</label>
+                                    <input type="number" id="editSesiLatihan" class="input w-full" min="1" max="7">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Target Tanggal</label>
+                                    <input type="date" id="editTargetTanggal" class="input w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rekomendasi Makro -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Rekomendasi Kebutuhan Harian</h3>
+                            
+                            <div id="macroRecommendation" class="grid grid-cols-4 gap-4">
+                                <!-- Akan diisi oleh JavaScript -->
+                            </div>
+                            
+                            <div class="mt-6">
+                                <button onclick="calculateRecommendation()" class="tombol-merah px-6 py-3">
+                                    <i class="fas fa-calculator mr-2"></i> Hitung Ulang
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="flex justify-end">
+                            <button onclick="saveGoals()" class="tombol-merah px-8 py-3">
+                                <i class="fas fa-save mr-2"></i> Simpan Tujuan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Pengaturan -->
+                    <div id="tabPengaturan" class="hidden space-y-8">
+                        <!-- Tampilan -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Pengaturan Tampilan</h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Mode Tema</label>
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="theme" value="dark" class="mr-2 text-merah" checked>
+                                            <span class="text-gray-300">Gelap</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="theme" value="light" class="mr-2 text-merah">
+                                            <span class="text-gray-300">Terang</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Satuan Pengukuran</label>
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="units" value="metric" class="mr-2 text-merah" checked>
+                                            <span class="text-gray-300">Metrik (kg, cm)</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="units" value="imperial" class="mr-2 text-merah">
+                                            <span class="text-gray-300">Imperial (lbs, inch)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Bahasa</label>
+                                    <select class="input w-full">
+                                        <option value="id">Bahasa Indonesia</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifikasi -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Pengaturan Notifikasi</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Notifikasi Email</p>
+                                        <p class="text-sm text-gray-400">Update progress dan tips fitness</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-merah"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Pengingat Latihan</p>
+                                        <p class="text-sm text-gray-400">Pengingat jadwal latihan</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-merah"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Tips Nutrisi</p>
+                                        <p class="text-sm text-gray-400">Tips makanan dan resep</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-merah"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="flex justify-end">
+                            <button onclick="saveSettings()" class="tombol-merah px-8 py-3">
+                                <i class="fas fa-save mr-2"></i> Simpan Pengaturan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: Keamanan -->
+                    <div id="tabKeamanan" class="hidden space-y-8">
+                        <!-- Ubah Password -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Ubah Password</h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Password Saat Ini</label>
+                                    <div class="relative">
+                                        <input type="password" id="currentPassword" class="input w-full pr-12">
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('currentPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Password Baru</label>
+                                    <div class="relative">
+                                        <input type="password" id="newPassword" class="input w-full pr-12">
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('newPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-1">Minimal 8 karakter</p>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-300 mb-2">Konfirmasi Password Baru</label>
+                                    <div class="relative">
+                                        <input type="password" id="confirmNewPassword" class="input w-full pr-12">
+                                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('confirmNewPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="pt-4">
+                                    <button onclick="changePassword()" class="tombol-merah px-8 py-3">
+                                        <i class="fas fa-key mr-2"></i> Ubah Password
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sesi Aktif -->
+                        <div class="kartu p-6">
+                            <h3 class="text-xl font-bold mb-6">Sesi Login Aktif</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">Perangkat Ini</p>
+                                        <p class="text-sm text-gray-400">Browser: Chrome • OS: Windows</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-green-900/30 text-green-400 rounded text-sm">
+                                        Aktif
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium">Mobile Device</p>
+                                        <p class="text-sm text-gray-400">Login 2 hari lalu</p>
+                                    </div>
+                                    <button class="text-red-400 hover:text-red-300 text-sm">
+                                        <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <button onclick="logoutAllDevices()" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout dari Semua Perangkat
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hapus Akun -->
+                        <div class="kartu p-6 border border-red-900/50">
+                            <h3 class="text-xl font-bold mb-4 text-red-400">Zona Berbahaya</h3>
+                            <p class="text-gray-400 mb-4">Hapus akun Anda secara permanen. Aksi ini tidak dapat dibatalkan.</p>
+                            <button onclick="confirmDeleteAccount()" class="px-6 py-3 bg-red-900/30 text-red-400 border border-red-800 rounded-lg hover:bg-red-900/50">
+                                <i class="fas fa-trash mr-2"></i> Hapus Akun Saya
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Not Logged In State -->
+            <div id="notLoggedIn" class="hidden text-center py-12">
+                <div class="max-w-md mx-auto">
+                    <i class="fas fa-lock text-5xl text-merah mb-6"></i>
+                    <h3 class="text-2xl font-bold mb-4">Akses Ditolak</h3>
+                    <p class="text-gray-400 mb-8">Silakan login untuk mengakses halaman profil</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="masuk.html" class="tombol-merah px-8 py-3">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Login
+                        </a>
+                        <a href="daftar.html" class="bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-user-plus mr-2"></i> Daftar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+    <script src="js/user-manager.js"></script>
+    
+    <script>
+        let currentTab = 'profil';
+        
+        // Check login status
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+
+        function checkLoginStatus() {
+            const loading = document.getElementById('loadingState');
+            const profile = document.getElementById('profileContent');
+            const notLoggedIn = document.getElementById('notLoggedIn');
+
+            if (!auth.isLoggedIn()) {
+                loading.classList.add('hidden');
+                notLoggedIn.classList.remove('hidden');
+                return;
+            }
+
+            // User is logged in
+            loading.classList.add('hidden');
+            profile.classList.remove('hidden');
+            loadUserProfile();
+        }
+
+        function loadUserProfile() {
+            const user = auth.getCurrentUser();
+            
+            // Format tanggal
+            const joinDate = new Date(user.tanggalDaftar);
+            const formattedDate = joinDate.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // Isi data profil
+            document.getElementById('editNama').value = user.nama;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('joinDate').value = formattedDate;
+            document.getElementById('memberId').value = user.id.substring(0, 8);
+            
+            // Data fisik
+            document.getElementById('editJenisKelamin').value = user.data.profil.jenisKelamin;
+            document.getElementById('editUsia').value = user.data.profil.usia;
+            document.getElementById('editBerat').value = user.data.profil.berat;
+            document.getElementById('editTinggi').value = user.data.profil.tinggi;
+            document.getElementById('editAktivitas').value = user.data.profil.aktivitas;
+            
+            // Tujuan
+            document.querySelector(`input[name="editTujuan"][value="${user.data.profil.tujuan}"]`).checked = true;
+            document.getElementById('editTargetBerat').value = user.data.goals.targetBerat;
+            document.getElementById('editTargetProtein').value = user.data.goals.targetProtein;
+            document.getElementById('editSesiLatihan').value = user.data.goals.latihanPerMinggu;
+            
+            // Hitung rekomendasi
+            calculateRecommendation();
+        }
+
+        function switchTab(tabName) {
+            // Update tab classes
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Hide all tab content
+            document.getElementById('tabProfil').classList.add('hidden');
+            document.getElementById('tabTujuan').classList.add('hidden');
+            document.getElementById('tabPengaturan').classList.add('hidden');
+            document.getElementById('tabKeamanan').classList.add('hidden');
+            
+            // Show selected tab
+            document.getElementById(`tab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).classList.remove('hidden');
+            currentTab = tabName;
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function calculateRecommendation() {
+            const user = auth.getCurrentUser();
+            const macros = userManager.calculateUserMacros(user.id);
+            
+            if (macros) {
+                const macroDiv = document.getElementById('macroRecommendation');
+                macroDiv.innerHTML = `
+                    <div class="text-center p-4 bg-gray-900 rounded-lg">
+                        <div class="text-2xl font-bold text-merah">${macros.kalori}</div>
+                        <div class="text-sm text-gray-400">Kalori/hari</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-900 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-400">${macros.protein}g</div>
+                        <div class="text-sm text-gray-400">Protein</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-900 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-400">${macros.karbohidrat}g</div>
+                        <div class="text-sm text-gray-400">Karbohidrat</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-900 rounded-lg">
+                        <div class="text-2xl font-bold text-green-400">${macros.lemak}g</div>
+                        <div class="text-sm text-gray-400">Lemak</div>
+                    </div>
+                `;
+            }
+        }
+
+        function saveProfile() {
+            const user = auth.getCurrentUser();
+            
+            const updatedProfile = {
+                nama: document.getElementById('editNama').value,
+                data: {
+                    ...user.data,
+                    profil: {
+                        jenisKelamin: document.getElementById('editJenisKelamin').value,
+                        usia: parseInt(document.getElementById('editUsia').value),
+                        berat: parseFloat(document.getElementById('editBerat').value),
+                        tinggi: parseFloat(document.getElementById('editTinggi').value),
+                        aktivitas: parseFloat(document.getElementById('editAktivitas').value),
+                        tujuan: user.data.profil.tujuan // Tetap sama
+                    }
+                }
+            };
+            
+            const success = auth.updateUserData(user.id, updatedProfile);
+            
+            if (success) {
+                alert('Profil berhasil diperbarui!');
+                loadUserProfile(); // Refresh data
+            } else {
+                alert('Gagal memperbarui profil!');
+            }
+        }
+
+        function saveGoals() {
+            const user = auth.getCurrentUser();
+            
+            const updatedGoals = {
+                data: {
+                    ...user.data,
+                    profil: {
+                        ...user.data.profil,
+                        tujuan: document.querySelector('input[name="editTujuan"]:checked').value
+                    },
+                    goals: {
+                        targetBerat: parseFloat(document.getElementById('editTargetBerat').value),
+                        targetProtein: parseInt(document.getElementById('editTargetProtein').value),
+                        latihanPerMinggu: parseInt(document.getElementById('editSesiLatihan').value)
+                    }
+                }
+            };
+            
+            const success = auth.updateUserData(user.id, updatedGoals);
+            
+            if (success) {
+                alert('Tujuan berhasil diperbarui!');
+                calculateRecommendation(); // Refresh rekomendasi
+            } else {
+                alert('Gagal memperbarui tujuan!');
+            }
+        }
+
+        function saveSettings() {
+            alert('Pengaturan berhasil disimpan! (Simulasi)');
+            // Implementasi sebenarnya akan menyimpan ke user.data.settings
+        }
+
+        function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmNewPassword').value;
+            
+            if (!current || !newPass || !confirm) {
+                alert('Harap isi semua field!');
+                return;
+            }
+            
+            if (newPass.length < 8) {
+                alert('Password baru minimal 8 karakter!');
+                return;
+            }
+            
+            if (newPass !== confirm) {
+                alert('Password baru tidak sama!');
+                return;
+            }
+            
+            // Dalam implementasi sebenarnya, verifikasi password saat ini
+            // dan hash password baru sebelum menyimpan
+            
+            alert('Password berhasil diubah! (Simulasi)');
+            
+            // Clear fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+        }
+
+        function logoutAllDevices() {
+            if (confirm('Anda akan logout dari semua perangkat. Lanjutkan?')) {
+                // Hanya logout dari perangkat ini untuk simulasi
+                auth.logout();
+                window.location.href = 'masuk.html';
+            }
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('HAPUS AKUN PERMANEN?\n\nAksi ini tidak dapat dibatalkan. Semua data Anda akan dihapus.')) {
+                const confirmation = prompt('Ketik "HAPUS" untuk konfirmasi:');
+                if (confirmation === 'HAPUS') {
+                    // Hapus user dari database
+                    const user = auth.getCurrentUser();
+                    const userIndex = auth.users.findIndex(u => u.id === user.id);
+                    
+                    if (userIndex !== -1) {
+                        auth.users.splice(userIndex, 1);
+                        auth.saveUsers();
+                        auth.logout();
+                        
+                        alert('Akun berhasil dihapus!');
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    alert('Penghapusan dibatalkan.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
