@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - LIFTIT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #0a0a0a; color: white; font-family: 'Inter', sans-serif; }
+        .kartu { background: #171717; border: 1px solid #333; border-radius: 12px; }
+        .input { background: #262626; border: 1px solid #404040; color: white; padding: 12px 16px; border-radius: 8px; }
+        .input:focus { outline: none; border-color: #dc2626; }
+        .tombol-merah { background: #dc2626; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; }
+        .tombol-merah:hover { background: #991b1b; }
+        .step { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .step.active { background: #dc2626; }
+        .step.inactive { background: #404040; }
+    </style>
+</head>
+<body class="bg-hitam min-h-screen p-4">
+    <div class="container mx-auto max-w-4xl py-8">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-merah rounded-xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-dumbbell text-2xl text-white"></i>
+            </div>
+            <h1 class="text-3xl font-bold">
+                <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+            </h1>
+            <p class="text-gray-400 mt-2">Bergabunglah dengan komunitas fitness</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="flex justify-between items-center mb-8 relative">
+            <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-800 -translate-y-1/2 z-0"></div>
+            <div class="absolute top-1/2 left-0 h-1 bg-merah -translate-y-1/2 z-10" style="width: 33%" id="progressBar"></div>
+            
+            <div class="relative z-20 text-center">
+                <div class="step active mx-auto mb-2">1</div>
+                <span class="text-xs text-gray-400">Data Diri</span>
+            </div>
+            <div class="relative z-20 text-center">
+                <div class="step inactive mx-auto mb-2">2</div>
+                <span class="text-xs text-gray-400">Tujuan Fitness</span>
+            </div>
+            <div class="relative z-20 text-center">
+                <div class="step inactive mx-auto mb-2">3</div>
+                <span class="text-xs text-gray-400">Selesai</span>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="kartu p-8">
+            <form id="registerForm">
+                <!-- Step 1: Personal Information -->
+                <div id="step1">
+                    <h2 class="text-2xl font-bold mb-6">Informasi Pribadi</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Nama Lengkap</label>
+                            <input type="text" id="nama" class="input w-full" placeholder="John Doe" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Email</label>
+                            <input type="email" id="email" class="input w-full" placeholder="nama@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="password" class="input w-full pr-12" placeholder="Minimal 8 karakter" required>
+                                <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Minimal 8 karakter</p>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Konfirmasi Password</label>
+                            <div class="relative">
+                                <input type="password" id="confirmPassword" class="input w-full pr-12" placeholder="Ulangi password" required>
+                                <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('confirmPassword')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="button" class="tombol-merah px-6 py-3" onclick="nextStep()">
+                            Selanjutnya <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Fitness Goals -->
+                <div id="step2" class="hidden">
+                    <h2 class="text-2xl font-bold mb-6">Tujuan & Data Fisik</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Jenis Kelamin</label>
+                            <select id="jenisKelamin" class="input w-full">
+                                <option value="pria">Pria</option>
+                                <option value="wanita">Wanita</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Usia</label>
+                            <input type="number" id="usia" class="input w-full" placeholder="25" min="15" max="80" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-300 mb-2">Berat Badan (kg)</label>
+                            <input type="number" id="berat" class="input w-full" placeholder="70" min="30" max="200" step="0.1" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2">Tinggi Badan (cm)</label>
+                            <input type="number" id="tinggi" class="input w-full" placeholder="175" min="100" max="250" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-300 mb-2">Level Aktivitas</label>
+                        <select id="aktivitas" class="input w-full">
+                            <option value="1.2">Sedentary (Minim gerak)</option>
+                            <option value="1.375" selected>Ringan (Olahraga 1-3x/minggu)</option>
+                            <option value="1.55">Moderat (Olahraga 3-5x/minggu)</option>
+                            <option value="1.725">Aktif (Olahraga 6-7x/minggu)</option>
+                            <option value="1.9">Sangat Aktif (Atlet)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-300 mb-2">Tujuan Utama</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="tujuan" value="bulking" class="hidden peer" checked>
+                                <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                    <i class="fas fa-dumbbell text-xl mb-2 block text-merah"></i>
+                                    <span class="font-medium">Bulking</span>
+                                    <p class="text-xs text-gray-400 mt-1">Naik massa otot</p>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="tujuan" value="cutting" class="hidden peer">
+                                <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                    <i class="fas fa-weight text-xl mb-2 block text-merah"></i>
+                                    <span class="font-medium">Cutting</span>
+                                    <p class="text-xs text-gray-400 mt-1">Turun lemak</p>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="tujuan" value="maintain" class="hidden peer">
+                                <div class="p-4 border border-gray-700 rounded-lg peer-checked:border-merah peer-checked:bg-red-900/20 text-center">
+                                    <i class="fas fa-balance-scale text-xl mb-2 block text-merah"></i>
+                                    <span class="font-medium">Maintain</span>
+                                    <p class="text-xs text-gray-400 mt-1">Pertahankan</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button type="button" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800" onclick="prevStep()">
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali
+                        </button>
+                        <button type="button" class="tombol-merah px-6 py-3" onclick="nextStep()">
+                            Selanjutnya <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Complete -->
+                <div id="step3" class="hidden">
+                    <h2 class="text-2xl font-bold mb-6">Hitung Kebutuhan Anda</h2>
+                    
+                    <div class="mb-6 p-6 bg-gray-800/50 rounded-lg">
+                        <div class="text-center mb-6">
+                            <i class="fas fa-calculator text-4xl text-merah mb-4"></i>
+                            <p class="text-gray-300">Berdasarkan data Anda, berikut rekomendasi kebutuhan harian:</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6" id="calculationResults">
+                            <!-- Hasil kalkulasi akan ditampilkan di sini -->
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Target Berat Badan (kg)</label>
+                            <input type="number" id="targetBerat" class="input w-full" placeholder="75" step="0.1" required>
+                            <p class="text-xs text-gray-400 mt-1">Berat badan yang ingin Anda capai</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="flex items-start">
+                                <input type="checkbox" id="terms" class="w-4 h-4 text-merah bg-gray-700 border-gray-600 rounded mt-1" required>
+                                <label for="terms" class="ml-2 text-sm text-gray-300">
+                                    Saya setuju dengan <a href="#" class="text-merah hover:text-red-400">Syarat & Ketentuan</a> dan 
+                                    <a href="#" class="text-merah hover:text-red-400">Kebijakan Privasi</a> LIFTIT.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button type="button" class="px-6 py-3 border border-gray-700 rounded-lg hover:bg-gray-800" onclick="prevStep()">
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali
+                        </button>
+                        <button type="submit" class="tombol-merah px-8 py-3 text-lg">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Buat Akun
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden p-4 bg-red-900/30 border border-red-800 rounded-lg text-red-300 text-sm mt-6">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span id="errorText"></span>
+            </div>
+        </div>
+
+        <!-- Login Link -->
+        <div class="text-center mt-6">
+            <p class="text-gray-400">
+                Sudah punya akun? 
+                <a href="masuk.html" class="text-merah font-bold hover:text-red-400">Masuk di sini</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+    
+    <script>
+        let currentStep = 1;
+        
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const steps = document.querySelectorAll('.step');
+            
+            // Update width
+            const width = (currentStep - 1) * 33.33 + '%';
+            progressBar.style.width = width;
+            
+            // Update step classes
+            steps.forEach((step, index) => {
+                if (index + 1 <= currentStep) {
+                    step.classList.remove('inactive');
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                    step.classList.add('inactive');
+                }
+            });
+        }
+
+        // Validate step 1
+        function validateStep1() {
+            const nama = document.getElementById('nama').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!nama || !email || !password || !confirmPassword) {
+                showError('Harap isi semua data!');
+                return false;
+            }
+            
+            if (password.length < 8) {
+                showError('Password minimal 8 karakter!');
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Password tidak sama!');
+                return false;
+            }
+            
+            // Validasi email sederhana
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Format email tidak valid!');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Validate step 2
+        function validateStep2() {
+            const usia = document.getElementById('usia').value;
+            const berat = document.getElementById('berat').value;
+            const tinggi = document.getElementById('tinggi').value;
+            
+            if (!usia || !berat || !tinggi) {
+                showError('Harap isi semua data fisik!');
+                return false;
+            }
+            
+            if (usia < 15 || usia > 80) {
+                showError('Usia harus antara 15-80 tahun!');
+                return false;
+            }
+            
+            if (berat < 30 || berat > 200) {
+                showError('Berat badan harus antara 30-200 kg!');
+                return false;
+            }
+            
+            if (tinggi < 100 || tinggi > 250) {
+                showError('Tinggi badan harus antara 100-250 cm!');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Calculate macros for step 3
+        function calculateMacros() {
+            const berat = parseFloat(document.getElementById('berat').value);
+            const tinggi = parseFloat(document.getElementById('tinggi').value);
+            const usia = parseInt(document.getElementById('usia').value);
+            const jenisKelamin = document.getElementById('jenisKelamin').value;
+            const aktivitas = parseFloat(document.getElementById('aktivitas').value);
+            const tujuan = document.querySelector('input[name="tujuan"]:checked').value;
+            
+            // Hitung BMR
+            let bmr;
+            if (jenisKelamin === 'pria') {
+                bmr = 88.362 + (13.397 * berat) + (4.799 * tinggi) - (5.677 * usia);
+            } else {
+                bmr = 447.593 + (9.247 * berat) + (3.098 * tinggi) - (4.330 * usia);
+            }
+            
+            // Hitung TDEE
+            const tdee = bmr * aktivitas;
+            
+            // Sesuaikan dengan tujuan
+            let targetKalori;
+            switch(tujuan) {
+                case 'bulking':
+                    targetKalori = Math.round(tdee + 500);
+                    break;
+                case 'cutting':
+                    targetKalori = Math.round(tdee - 500);
+                    break;
+                default:
+                    targetKalori = Math.round(tdee);
+            }
+            
+            // Hitung makronutrien
+            const proteinGram = Math.round(tujuan === 'bulking' ? berat * 2 : berat * 1.6);
+            const proteinKalori = proteinGram * 4;
+            
+            const lemakKalori = targetKalori * 0.25;
+            const lemakGram = Math.round(lemakKalori / 9);
+            
+            const karboKalori = targetKalori - proteinKalori - lemakKalori;
+            const karboGram = Math.round(karboKalori / 4);
+            
+            // Tampilkan hasil
+            const resultsDiv = document.getElementById('calculationResults');
+            resultsDiv.innerHTML = `
+                <div class="text-center p-4 bg-gray-900 rounded-lg">
+                    <div class="text-2xl font-bold text-merah">${targetKalori}</div>
+                    <div class="text-sm text-gray-400">Kalori/hari</div>
+                </div>
+                <div class="text-center p-4 bg-gray-900 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-400">${proteinGram}g</div>
+                    <div class="text-sm text-gray-400">Protein</div>
+                </div>
+                <div class="text-center p-4 bg-gray-900 rounded-lg">
+                    <div class="text-2xl font-bold text-yellow-400">${karboGram}g</div>
+                    <div class="text-sm text-gray-400">Karbohidrat</div>
+                </div>
+                <div class="text-center p-4 bg-gray-900 rounded-lg">
+                    <div class="text-2xl font-bold text-green-400">${lemakGram}g</div>
+                    <div class="text-sm text-gray-400">Lemak</div>
+                </div>
+            `;
+            
+            // Set default target berat
+            if (tujuan === 'bulking') {
+                document.getElementById('targetBerat').value = Math.round(berat + 5);
+            } else if (tujuan === 'cutting') {
+                document.getElementById('targetBerat').value = Math.round(berat - 5);
+            } else {
+                document.getElementById('targetBerat').value = Math.round(berat);
+            }
+        }
+
+        // Next step
+        function nextStep() {
+            if (currentStep === 1 && !validateStep1()) {
+                return;
+            }
+            
+            if (currentStep === 2 && !validateStep2()) {
+                return;
+            }
+            
+            if (currentStep === 2) {
+                calculateMacros();
+            }
+            
+            // Hide current step
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            
+            // Show next step
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            
+            // Update progress bar
+            updateProgressBar();
+            
+            // Hide error jika ada
+            hideError();
+        }
+
+        // Previous step
+        function prevStep() {
+            // Hide current step
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            
+            // Show previous step
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            
+            // Update progress bar
+            updateProgressBar();
+            
+            // Hide error jika ada
+            hideError();
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorText.textContent = message;
+            errorDiv.classList.remove('hidden');
+            
+            // Scroll ke error
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Hide error message
+        function hideError() {
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const terms = document.getElementById('terms');
+            const targetBerat = document.getElementById('targetBerat').value;
+            
+            if (!terms.checked) {
+                showError('Anda harus menyetujui syarat dan ketentuan!');
+                return;
+            }
+            
+            if (!targetBerat) {
+                showError('Harap masukkan target berat badan!');
+                return;
+            }
+            
+            // Kumpulkan semua data
+            const userData = {
+                nama: document.getElementById('nama').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                berat: parseFloat(document.getElementById('berat').value),
+                tinggi: parseFloat(document.getElementById('tinggi').value),
+                usia: parseInt(document.getElementById('usia').value),
+                jenisKelamin: document.getElementById('jenisKelamin').value,
+                aktivitas: parseFloat(document.getElementById('aktivitas').value),
+                tujuan: document.querySelector('input[name="tujuan"]:checked').value,
+                targetBerat: parseFloat(targetBerat)
+            };
+            
+            // Registrasi user
+            const result = auth.register(userData);
+            
+            if (result.success) {
+                // Redirect ke dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                showError(result.message);
+            }
+        });
+
+        // Initialize
+        updateProgressBar();
+    </script>
+</body>
+</html>

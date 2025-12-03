@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFTIT - Tracker Pembentukan Otot</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'merah': '#dc2626',
+                        'merah-gelap': '#991b1b',
+                        'hitam': '#0a0a0a',
+                        'abu-card': '#171717',
+                        'abu-border': '#333333'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .gradient-merah {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+        
+        .kartu {
+            background: linear-gradient(145deg, #171717 0%, #262626 100%);
+            border: 1px solid #333333;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .kartu:hover {
+            transform: translateY(-5px);
+            border-color: #dc2626;
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.2);
+        }
+        
+        .input-style {
+            background: #171717;
+            border: 1px solid #333333;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+        }
+        
+        .input-style:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        .tombol-merah {
+            background: #dc2626;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .tombol-merah:hover {
+            background: #991b1b;
+            transform: translateY(-2px);
+        }
+        
+        .garis-merah {
+            height: 3px;
+            width: 60px;
+            background: #dc2626;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- NAVBAR -->
+    <nav class="bg-hitam/90 backdrop-blur-md fixed w-full z-50 border-b border-abu-border">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                        <i class="fas fa-dumbbell text-xl text-white"></i>
+                    </div>
+                    <span class="ml-3 text-2xl font-bold">
+                        <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                    </span>
+                </div>
+                
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white">
+                        <i class=""></i> Beranda
+                    </a>
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-chart-line mr-2"></i> Dashboard
+                    </a>
+                    <a href="kalkulator.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-calculator mr-2"></i> Kalkulator
+                    </a>
+                    <a href="resep.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-utensils mr-2"></i> Resep
+                    </a>
+                    <a href="artikel.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-book-open mr-2"></i> Artikel
+                    </a>
+                    <a href="latihan.html" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-dumbbell mr-2"></i> Latihan
+                    </a>
+                    <a href="masuk.html" class="tombol-merah px-4 py-2">Masuk</a>
+                </div>
+                
+                <!-- Menu Mobile -->
+                <button id="menu-mobile" class="md:hidden text-merah">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- GANTI kalkulator dengan ini: -->
+<div class="kartu p-8 mb-16">
+    <h2 class="text-2xl font-bold mb-8 text-center">
+        <i class="fas fa-play-circle text-merah mr-3"></i>
+        Mulai dalam 3 Langkah Mudah
+    </h2>
+    
+    <div class="grid md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="text-center relative">
+            <div class="w-12 h-12 bg-merah rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                1
+            </div>
+            <h3 class="text-xl font-bold mb-3">Hitung Makro</h3>
+            <p class="text-gray-400 mb-4">
+                Gunakan kalkulator untuk mengetahui kebutuhan kalori dan protein harian Anda
+            </p>
+            <div class="mt-6">
+                <i class="fas fa-calculator text-3xl text-merah"></i>
+            </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="text-center relative">
+            <div class="w-12 h-12 bg-merah rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                2
+            </div>
+            <h3 class="text-xl font-bold mb-3">Ikuti Program</h3>
+            <p class="text-gray-400 mb-4">
+                Pilih program latihan sesuai level dan tujuan Anda dengan panduan video
+            </p>
+            <div class="mt-6">
+                <i class="fas fa-dumbbell text-3xl text-merah"></i>
+            </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="text-center relative">
+            <div class="w-12 h-12 bg-merah rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                3
+            </div>
+            <h3 class="text-xl font-bold mb-3">Track Progress</h3>
+            <p class="text-gray-400 mb-4">
+                Pantau perkembangan dengan dashboard lengkap dan grafik interaktif
+            </p>
+            <div class="mt-6">
+                <i class="fas fa-chart-line text-3xl text-merah"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-10">
+        <a href="daftar.html" class="tombol-merah px-8 py-4 inline-block text-lg">
+            <i class="fas fa-play mr-3"></i>
+            Mulai Sekarang 
+        </a>
+        <p class="text-gray-400 mt-4 text-sm">
+            Sudah punya akun? <a href="masuk.html" class="text-merah font-bold">Masuk di sini</a>
+        </p>
+    </div>
+</div>
+                
+                <!-- Fitur Utama -->
+                <div class="mb-16">
+                    <h2 class="text-3xl font-bold text-center mb-12">
+                        Semua yang Anda Butuhkan dalam 
+                        <span class="text-merah">Satu Platform</span>
+                    </h2>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Fitur 1: Nutrisi -->
+                        <div class="kartu p-6">
+                            <div class="w-14 h-14 gradient-merah rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-utensils text-2xl text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Kalkulator Nutrisi</h3>
+                            <div class="garis-merah"></div>
+                            <p class="text-gray-400 mb-4">
+                                Hitung kebutuhan kalori, protein, karbohidrat, dan lemak berdasarkan tujuan fitness Anda
+                            </p>
+                            <a href="kalkulator.html" class="text-merah font-semibold inline-flex items-center">
+                                Lihat Kalkulator Lengkap <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        
+                        <!-- Fitur 2: Resep -->
+                        <div class="kartu p-6">
+                            <div class="w-14 h-14 gradient-merah rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-book-open text-2xl text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Database Resep</h3>
+                            <div class="garis-merah"></div>
+                            <p class="text-gray-400 mb-4">
+                                100+ resep tinggi protein dengan filter berdasarkan bahan, waktu masak, dan kesulitan
+                            </p>
+                            <a href="resep.html" class="text-merah font-semibold inline-flex items-center">
+                                Jelajahi Resep <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        
+                        <!-- Fitur 3: Latihan -->
+                        <div class="kartu p-6">
+                            <div class="w-14 h-14 gradient-merah rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-dumbbell text-2xl text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Program Latihan</h3>
+                            <div class="garis-merah"></div>
+                            <p class="text-gray-400 mb-4">
+                                Program terstruktur (Push-Pull-Legs, Upper-Lower) dengan video panduan setiap gerakan
+                            </p>
+                            <a href="latihan.html" class="text-merah font-semibold inline-flex items-center">
+                                Lihat Program <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-abu-card border-t border-abu-border py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Tentang -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-merah rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dumbbell text-xl text-white"></i>
+                        </div>
+                        <span class="ml-3 text-2xl font-bold">
+                            <span class="text-white">LIFT</span><span class="text-merah">IT</span>
+                        </span>
+                    </div>
+                    <p class="text-gray-400">
+                        Platform lengkap untuk pembentukan massa otot berbasis data dan ilmu.
+                    </p>
+                </div>
+                
+                <!-- Fitur -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Fitur</h4>
+                    <ul class="space-y-2">
+                        <li><a href="kalkulator.html" class="text-gray-400 hover:text-white">Kalkulator Makro</a></li>
+                        <li><a href="resep.html" class="text-gray-400 hover:text-white">Database Resep</a></li>
+                        <li><a href="latihan.html" class="text-gray-400 hover:text-white">Program Latihan</a></li>
+                        <li><a href="dashboard.html" class="text-gray-400 hover:text-white">Tracking Progress</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Tim -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Tim Kami</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Naufal Khayri Lubis - 241401089</li>
+                        <li>Octho Rivaldo Sinaga - 241401122</li>
+                        <li>Michael Alexius Depari - 241401119</li>
+                    </ul>
+                </div>
+                
+                <!-- Kontak -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Kontak</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400"><i class="fas fa-envelope text-merah mr-2"></i> info@liftit.co.id</li>
+                        <li class="text-gray-400"><i class="fas fa-phone text-merah mr-2"></i> +62 812-3456-7890</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-abu-border pt-8 text-center text-gray-400">
+                <p>&copy; 2024 LIFTIT - Tracker Pembentukan Otot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/kalkulator.js"></script>
+    
+    <script>
+        // Inisialisasi Chart.js
+        function initChart() {
+            const ctx = document.getElementById('grafikMakro').getContext('2d');
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Protein', 'Karbohidrat', 'Lemak'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: [
+                            '#dc2626', // merah untuk protein
+                            '#3b82f6', // biru untuk karbo
+                            '#f59e0b'  // kuning untuk lemak
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#d1d5db'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        let makroChart = initChart();
+        
+        // Fungsi hitung makro
+        function hitungMakro() {
+            const berat = parseFloat(document.getElementById('berat').value);
+            const tinggi = parseFloat(document.getElementById('tinggi').value);
+            const usia = parseInt(document.getElementById('usia').value);
+            const aktivitas = parseFloat(document.getElementById('aktivitas').value);
+            const tujuan = document.getElementById('tujuan').value;
+            
+            if (!berat || !tinggi || !usia) {
+                alert('Harap isi semua data!');
+                return;
+            }
+            
+            // Hitung BMR (Basal Metabolic Rate)
+            const bmr = 10 * berat + 6.25 * tinggi - 5 * usia + 5;
+            const tdee = bmr * aktivitas;
+            
+            // Sesuaikan berdasarkan tujuan
+            let targetKalori;
+            switch(tujuan) {
+                case 'bulking':
+                    targetKalori = tdee + 500;
+                    break;
+                case 'cutting':
+                    targetKalori = tdee - 500;
+                    break;
+                default:
+                    targetKalori = tdee;
+            }
+            
+            // Hitung makronutrien
+            const proteinGram = berat * 2; // 2g per kg berat badan
+            const proteinKalori = proteinGram * 4;
+            
+            const lemakGram = berat * 0.8; // 0.8g per kg berat badan
+            const lemakKalori = lemakGram * 9;
+            
+            const sisaKalori = targetKalori - proteinKalori - lemakKalori;
+            const karboGram = sisaKalori / 4;
+            
+            // Update chart
+            makroChart.data.datasets[0].data = [proteinGram, karboGram, lemakGram];
+            makroChart.update();
+            
+            // Tampilkan hasil
+            const hasilDiv = document.getElementById('hasil-kalkulator');
+            hasilDiv.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="text-3xl font-bold text-merah">${Math.round(targetKalori)}</div>
+                    <div class="text-gray-400">Kalori/hari</div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="text-xl font-bold">${Math.round(proteinGram)}g</div>
+                        <div class="text-sm text-gray-400">Protein</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-bold">${Math.round(karboGram)}g</div>
+                        <div class="text-sm text-gray-400">Karbohidrat</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-bold">${Math.round(lemakGram)}g</div>
+                        <div class="text-sm text-gray-400">Lemak</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-gray-800 rounded-lg">
+                    <p class="text-sm text-gray-300">
+                        <i class="fas fa-lightbulb text-merah mr-2"></i>
+                        Tips: Konsumsi ${Math.round(proteinGram)}g protein per hari untuk optimalisasi pembentukan otot
+                    </p>
+                </div>
+            `;
+        }
+        
+        // Menu mobile
+        document.getElementById('menu-mobile').addEventListener('click', function() {
+            alert('Menu mobile akan ditampilkan di versi lengkap');
+        });
+    </script>
+</body>
+</html>
